@@ -24,8 +24,11 @@ public class  RechargeHisDetailsAdapter extends RecyclerView.Adapter<RechargeHis
     Context context;
     List<HRHDetailsModel> arrayList;
 
+    private List<HRHDetailsModel> dataList;
+
     public RechargeHisDetailsAdapter(List<HRHDetailsModel> arrayList) {
         this.arrayList = arrayList;
+        this.dataList = dataList;
     }
 
     @NonNull
@@ -81,4 +84,11 @@ public class  RechargeHisDetailsAdapter extends RecyclerView.Adapter<RechargeHis
             date = itemView.findViewById(R.id.crhd_date_time);
         }
     }
+
+    public void updateData(List<HRHDetailsModel> newData) {
+        this.dataList.clear(); // Clear old data
+        this.dataList.addAll(newData); // Add new data
+        notifyDataSetChanged(); // Refresh RecyclerView
+    }
+
 }

@@ -53,7 +53,7 @@ public class HouseholdsDetailsFragment extends Fragment{
     List<HouseholdsDetailsModel> arrayList;
     HouseholdsDetailsAdapter householdsDetailsAdapter;
     RecyclerView householdsDetailsRv;
-   SharedPrefManager sharedPrefManager;
+    SharedPrefManager sharedPrefManager;
     MyDatabase myDatabase;
     static String householdId="";
     public HouseholdsDetailsFragment(String toString) {
@@ -123,7 +123,7 @@ public class HouseholdsDetailsFragment extends Fragment{
         Call<List<HouseholdsDetailsModel>> call = requestApi.getMetersDtl(url, tokenstr);
 
         call.enqueue(new Callback<List<HouseholdsDetailsModel>>() {
-           // @RequiresApi(api = Build.VERSION_CODES.O)
+            // @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onResponse(@NonNull Call<List<HouseholdsDetailsModel>> call, @NonNull Response<List<HouseholdsDetailsModel>> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -167,7 +167,7 @@ public class HouseholdsDetailsFragment extends Fragment{
                             }
                         }
                     } */
-                   // arrayList=new ArrayList<>();
+                    // arrayList=new ArrayList<>();
                     //arrayList=myDatabase.getHouseholdsDetails(meterno);
                     List<HouseholdsDetailsModel> dlist2=new ArrayList<>();
                     String cum_eb_kwh ="cum_eb_kwh";

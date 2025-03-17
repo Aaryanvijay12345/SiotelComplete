@@ -58,7 +58,7 @@ public class HouseholdsFragment extends Fragment    {
         householdRecharge=v.findViewById(R.id.household_recharge_but);
         HouseHoldDetails=v.findViewById(R.id.household_details_but);
         setHouseHoldsFromDatabase();
-       // OnClick();
+        // OnClick();
 
 
         return  v;
@@ -132,7 +132,7 @@ public class HouseholdsFragment extends Fragment    {
             @Override
             public void onFailure(Call<List<HouseholdsModel>> call, Throwable t) {
                 Toast.makeText(getContext()," please check internet connection ",Toast.LENGTH_SHORT).show();
-              Log.v("err",t.toString());
+                Log.v("err",t.toString());
             }
         });
 

@@ -2,10 +2,10 @@ package com.example.siotel.models;
 
 public class HouseholdsDetailsModel {
 
-      String MeterSN;
-      double cum_eb_kwh;
-      double balance_amount;
-      String date;
+    String MeterSN;
+    double cum_eb_kwh;
+    double balance_amount;
+    String date;
 
     public HouseholdsDetailsModel() {
     }

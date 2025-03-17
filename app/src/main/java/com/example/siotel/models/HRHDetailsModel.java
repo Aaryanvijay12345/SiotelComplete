@@ -1,10 +1,10 @@
 package com.example.siotel.models;
 
 public class HRHDetailsModel {
-       String house;
-            String devid;
-            String date;
-            String amount;
+    String house;
+    String devid;
+    String date;
+    String amount;
 
     public HRHDetailsModel() {
     }

@@ -1,57 +1,51 @@
-<?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-   <item android:id="@+id/dashboard"
-       android:title="Dashboard"
-       android:icon="@drawable/dashboard"
-       />
+    <item android:id="@+id/dashboard"
+        android:title="Dashboard"
+        android:icon="@drawable/dashboard"/>
+
     <item android:id="@+id/household"
         android:icon="@drawable/ic_device_hub"
         android:title="Households"/>
 
     <item android:id="@+id/recharge_history"
         android:icon="@drawable/ic_history_custom_input"
-
         android:title="Recharge History"/>
+
+    <item
+        android:id="@+id/get_report"
+        android:title="Consumption History"
+        android:icon="@drawable/ic_report"/>
+
+    <item
+        android:id="@+id/fragment_recharge_report"
+        android:title="Recharge Report"
+        android:icon="@drawable/ic_report"/>
+    <item
+        android:id="@+id/consumer_meter_information"
+        android:title="Consumer Meter Info"
+        android:icon="@drawable/ic_report"/>
+
+    <item
+        android:id="@+id/menu_invoice"
+        android:title="Invoice"
+        android:checkable="false">
+        <menu>
+            <item
+                android:id="@+id/menu_create_invoice"
+                android:title="Create" />
+            <item
+                android:id="@+id/menu_invoice_list"
+                android:title="Invoice List" />
+        </menu>
+    </item>
+
+
+
     <item android:id="@+id/contact"
         android:icon="@drawable/ic_contact_support"
         android:title="Contact"/>
+
     <item android:id="@+id/help"
         android:icon="@drawable/info"
         android:title="Help"/>
-    <!--  <item android:id="@+id/meter_report"
-          android:icon="@drawable/ic_bar_char_custom_intput"
-          android:title="Meter Report"/>
-          <item android:id="@+id/meters_details"
-        android:icon="@drawable/ic_electric_meter"
-        android:title="Meter Detail"/>
-      <item android:id="@+id/parameter_add"
-          android:icon="@drawable/ic_work_costom_input"
-          android:title="Parameter Add"/>
-      <item android:id="@+id/read_all"
-          android:icon="@drawable/ic_done_all_custom_input"
-          android:title="Read All"/>
-      <item android:id="@+id/recharge"
-          android:icon="@drawable/ic_currency_rupee_custom_input"
-           android:title="Recharge"/>
-<item android:id="@+id/create_new"
-        android:icon="@drawable/ic_create_custom_input"
-        android:title="Create New"/>
-    <item android:id="@+id/View"
-        android:icon="@drawable/ic_view_sidebar_custom_input"
-        android:title="View"
-        />
-    <item android:id="@+id/write_Command"
-        android:icon="@drawable/ic_create_custom_input"
-        android:title="Write Command"/>
-    <item android:id="@+id/read_command"
-        android:icon="@drawable/ic_read_more_custom_input"
-        android:title="Read Command"/>
-      <item android:id="@+id/lora_api"
-          android:icon="@drawable/ic_api_custom_input"
-          android:title="LORA API"/>
-      <item android:id="@+id/invoice_report"
-          android:icon="@drawable/ic_report_custom_input"
-          android:title="Invoice Report"/>
-       -->
-
 </menu>

@@ -1,0 +1,111 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@color/lightGray">
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="All Orders / Change Order Status"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/darkBlue"
+        android:gravity="center"
+        android:paddingBottom="12dp" />
+
+    <!-- Scrollable Table -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true">
+
+        <HorizontalScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scrollbars="horizontal">
+
+            <TableLayout
+                android:id="@+id/tableLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:stretchColumns="*"
+                android:background="@android:color/white"
+                android:elevation="4dp">
+
+                <!-- Table Header -->
+                <TableRow
+                    android:background="@drawable/header_bg"
+                    android:padding="12dp"
+                    android:layout_marginBottom="4dp">
+
+                    <TextView android:text="INVOICE" style="@style/TableHeader"/>
+                    <TextView android:text="CUSTOMER" style="@style/TableHeader"/>
+                    <TextView android:text="ADDRESS" style="@style/TableHeader"/>
+                    <TextView android:text="INVOICE DATE" style="@style/TableHeader"/>
+                    <TextView android:text="DUE DATE" style="@style/TableHeader"/>
+                    <TextView android:text="TOTAL AMOUNT" style="@style/TableHeader"/>
+                    <TextView android:text="STATUS" style="@style/TableHeader"/>
+                    <TextView android:text="VIEW" style="@style/TableHeader"/>
+                    <TextView android:text="DOWNLOAD" style="@style/TableHeader"/>
+                </TableRow>
+
+                <!-- Sample Table Row -->
+                <TableRow
+                    android:background="@drawable/table_row_bg"
+                    android:padding="10dp"
+                    android:layout_marginBottom="4dp"
+                    android:showDividers="middle"
+                    android:divider="@android:color/darker_gray"
+                    android:dividerPadding="5dp">
+
+                    <TextView android:text="#27" style="@style/TableCell"/>
+                    <TextView android:text="UG_01" style="@style/TableCell"/>
+                    <TextView android:text="506F980000006FC5" style="@style/TableCell"/>
+                    <TextView android:text="Aug. 1, 2022" style="@style/TableCell"/>
+                    <TextView android:text="Aug. 25, 2022" style="@style/TableCell"/>
+                    <TextView android:text="₹25,939.35" style="@style/TableCell"/>
+
+                    <TextView
+                        android:text="Paid"
+                        android:background="@drawable/status_paid_bg"
+                        android:padding="6dp"
+                        android:textColor="@android:color/white"
+                        android:gravity="center"
+                        android:layout_width="80dp"
+                    android:layout_height="wrap_content"/>
+
+                    <Button
+                        android:text="View"
+                        android:background="@drawable/button_blue"
+                        android:textColor="@android:color/white"
+                        android:padding="6dp"
+                        android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"/>  <!-- Added margin for spacing -->
+
+                    <TextView android:text="Download"
+                        android:textColor="@color/darkBlue"
+                        android:gravity="center"
+                        android:layout_width="wrap_content"/>
+                </TableRow>
+
+            </TableLayout>
+
+        </HorizontalScrollView>
+    </ScrollView>
+
+    <!-- Home Dashboard Button -->
+    <Button
+        android:id="@+id/btn_dashboard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Home Dashboard"
+        android:textColor="@android:color/white"
+        android:padding="14dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/button_blue"/>
+</LinearLayout>

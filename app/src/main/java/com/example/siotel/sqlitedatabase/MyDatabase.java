@@ -273,7 +273,7 @@ public class MyDatabase extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 // on below line we are adding the data from cursor to our array list.
-                    list.add(new HouseholdsDetailsModel(cursor.getString(1),
+                list.add(new HouseholdsDetailsModel(cursor.getString(1),
                         cursor.getDouble(2),
                         cursor.getDouble(3),cursor.getString(4)));
             } while (cursor.moveToNext());

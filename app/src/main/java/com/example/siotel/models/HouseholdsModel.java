@@ -9,6 +9,8 @@ public class HouseholdsModel {
     private String metersno;
     private String date;
 
+    private String siteName;
+
     public HouseholdsModel() {
     }
 
@@ -16,7 +18,9 @@ public class HouseholdsModel {
         this.householdname = householdname;
         this.metersno = metersno;
         this.date = date;
+        this.siteName = siteName;
     }
+
 
     public String getHouseholdname() { return householdname; }
     public void setHouseholdname(String value) { this.householdname = value; }
@@ -26,4 +30,13 @@ public class HouseholdsModel {
 
     public String getDate() { return date; }
     public void setDate(String value) { this.date = value; }
+
+
+    public String getSiteName() {
+        return siteName;
+    }
+
+    public void setSiteName(String value) {
+        this.siteName = value;
+    }
 }

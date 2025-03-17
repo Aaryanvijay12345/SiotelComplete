@@ -38,10 +38,10 @@ public class HouseholdDatabase extends SQLiteOpenHelper {
 
 
         String query="CREATE TABLE " +TABLE_NAME+" ("+
-                   ID_COL+" INTEGER PRIMARY KEY AUTOINCREMENT,"
-                   + HOUSEHOLD_NAME +" TEXT,"
-                   +HOUSEHOLD_ID+" TEXT,"
-                   +DATE+" TEXT)";
+                ID_COL+" INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + HOUSEHOLD_NAME +" TEXT,"
+                +HOUSEHOLD_ID+" TEXT,"
+                +DATE+" TEXT)";
 
         sqLiteDatabase.execSQL(query);
     }

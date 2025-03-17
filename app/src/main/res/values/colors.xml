@@ -166,4 +166,10 @@
     <color name="DarkBlue">#00008B</color>
     <color name="Navy">#000080</color>
     <color name="Black">#000000</color>
+
+    <color name="lightGray">#F5F5F5</color>
+    <color name="darkBlue">#0057D9</color>
+
+
+
 </resources>

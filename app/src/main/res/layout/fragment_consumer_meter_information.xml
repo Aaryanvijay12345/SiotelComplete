@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    tools:context=".fragment.ConsumerMeterInformationFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Title Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:background="@android:color/darker_gray"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Consumer Meter"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" Information"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <!-- Dropdowns and Input Fields -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <!-- Select Site -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Select Site"
+                android:textStyle="bold"
+                android:paddingBottom="5dp" />
+
+            <Spinner
+                android:id="@+id/spinner_select_site"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/editbox_background"
+                android:padding="10dp"
+                android:hint="Select Site"/>
+
+            <!-- Meter SNO -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MeterSNO"
+                android:textStyle="bold"
+                android:paddingTop="10dp"
+                android:paddingBottom="5dp" />
+
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteMeterSNO1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Search Meter SNO"
+                android:background="@android:drawable/editbox_background"
+                android:padding="8dp"/>
+
+            <!-- Financial Year -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Financial Year"
+                android:textStyle="bold"
+                android:paddingTop="10dp"
+                android:paddingBottom="5dp" />
+
+            <Spinner
+                android:id="@+id/spinner_financial_year"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/editbox_background"
+                android:padding="10dp" />
+
+            <!-- Date Pickers -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="10dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Start From"
+                        android:textStyle="bold"
+                        android:paddingBottom="5dp" />
+
+                    <EditText
+                        android:id="@+id/edittext_start_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:drawable/editbox_background"
+                        android:drawableEnd="@android:drawable/ic_menu_today"
+                        android:focusable="false"
+                        android:padding="10dp"
+                        android:text="Start Date" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingStart="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="End To"
+                        android:textStyle="bold"
+                        android:paddingBottom="5dp" />
+
+                    <EditText
+                        android:id="@+id/edittext_end_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:drawable/editbox_background"
+                        android:drawableEnd="@android:drawable/ic_menu_today"
+                        android:focusable="false"
+                        android:padding="10dp"
+                        android:text="End Date" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Get Report Button -->
+            <Button
+                android:id="@+id/button_get_report"
+                android:layout_width="155dp"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:backgroundTint="@color/teal_700"
+                android:text="Get Report"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="horizontal"
+            android:fillViewport="true">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewMeterInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="true"
+                />
+
+
+
+        </HorizontalScrollView>
+
+
+
+
+    </LinearLayout>
+</ScrollView>

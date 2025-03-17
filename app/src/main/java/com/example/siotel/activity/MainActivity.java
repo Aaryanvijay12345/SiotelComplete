@@ -34,10 +34,15 @@ import com.example.siotel.SharedPrefManager;
 import com.example.siotel.api.PostRequestApi;
 import com.example.siotel.connectapi.AllApiConnect;
 import com.example.siotel.fragment.BalanceFragment;
+import com.example.siotel.fragment.ConsumerMeterInformationFragment;
 import com.example.siotel.fragment.DashboardFragment;
 import com.example.siotel.fragment.HouseholdsFragment;
+import com.example.siotel.fragment.InvoiceListFragment;
 import com.example.siotel.fragment.RechargeHistoryFragment;
 import com.example.siotel.fragment.RechargeFragment;
+//import com.example.siotel.fragment.ReportFragment;
+import com.example.siotel.fragment.RechargeReportFragment;
+import com.example.siotel.fragment.ReportFragment;
 import com.example.siotel.models.HouseholdsModel;
 import com.example.siotel.models.Token;
 import com.example.siotel.sqlitedatabase.HouseholdDatabase;
@@ -227,54 +232,82 @@ public class MainActivity extends AppCompatActivity {
 
     private void navigationViewItemSelect() {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-
-            // This method will trigger on item Click of navigation menu
             @Override
-            public boolean onNavigationItemSelected(MenuItem menuItem) {
-
-
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                int id = menuItem.getItemId();
                 drawerLayout.closeDrawers();
 
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-                //Check to see which item was being clicked and perform appropriate action
-               switch (menuItem.getItemId()) {
-
-                    //Replacing the main content with ContentFragment
+                switch (id) {
                     case R.id.dashboard:
-                        FragmentManager fragmentManager=getSupportFragmentManager();
-                        FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-                        fragmentTransaction.replace(R.id.fragmentContainerView,new DashboardFragment());
+                        fragmentTransaction.replace(R.id.fragmentContainerView, new DashboardFragment());
                         fragmentTransaction.commit();
                         return true;
+
                     case R.id.recharge_history:
-                        FragmentManager fragmentManager1=getSupportFragmentManager();
-                        FragmentTransaction fragmentTransaction1=fragmentManager1.beginTransaction();
-                        fragmentTransaction1.replace(R.id.fragmentContainerView,new RechargeHistoryFragment());
-                        fragmentTransaction1.commit();
+                        fragmentTransaction.replace(R.id.fragmentContainerView, new RechargeHistoryFragment());
+                        fragmentTransaction.commit();
                         return true;
 
                     case R.id.household:
-                        FragmentManager fragmentManager3=getSupportFragmentManager();
-                        FragmentTransaction fragmentTransaction3=fragmentManager3.beginTransaction();
-                        fragmentTransaction3.replace(R.id.fragmentContainerView,new HouseholdsFragment());
-                        fragmentTransaction3.commit();
-                        return  true;
+                        fragmentTransaction.replace(R.id.fragmentContainerView, new HouseholdsFragment());
+                        fragmentTransaction.commit();
+                        return true;
+
                     case R.id.contact:
-                        FragmentManager fragmentManager4=getSupportFragmentManager();
-                        FragmentTransaction fragmentTransaction4=fragmentManager4.beginTransaction();
                         getSupportFragmentManager().popBackStack();
-                        fragmentTransaction4.replace(R.id.fragmentContainerView,new BalanceFragment());
-                        fragmentTransaction4.commit();
-                        return  true;
+                        fragmentTransaction.replace(R.id.fragmentContainerView, new BalanceFragment());
+                        fragmentTransaction.commit();
+                        return true;
+
+                    case R.id.get_report:
+                        getSupportFragmentManager().popBackStack();
+                        fragmentTransaction.replace(R.id.fragmentContainerView, new ReportFragment());
+                        fragmentTransaction.commit();
+                        return true;
+
+                    case R.id.fragment_recharge_report:
+                        getSupportFragmentManager().popBackStack();
+                        fragmentTransaction.replace(R.id.fragmentContainerView, new RechargeReportFragment());
+                        fragmentTransaction.commit();
+                        return true;
+
+                    case R.id.menu_create_invoice:
+//                        Toast.makeText(MainActivity.this, "Create Invoice Clicked", Toast.LENGTH_SHORT).show();
+                        getSupportFragmentManager().popBackStack();
+                        fragmentTransaction.replace(R.id.fragmentContainerView, new ReportFragment());
+                        fragmentTransaction.commit();
+                        return true;
+
+                    case R.id.menu_invoice_list:
+                        getSupportFragmentManager().popBackStack();
+                        fragmentTransaction.replace(R.id.fragmentContainerView, new InvoiceListFragment());
+                        fragmentTransaction.commit();
+                        return true;
+
+//                    case R.id.menu_invoice_list:
+//                        // Open the Invoice List website in the browser
+//                        String url = "http://meters.siotel.in/invoice/invoice-list/";
+//                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+//                        startActivity(intent);
+//                        return true;
+
+
+                    case R.id.consumer_meter_information:
+                        getSupportFragmentManager().popBackStack();
+                        fragmentTransaction.replace(R.id.fragmentContainerView, new ConsumerMeterInformationFragment());
+                        fragmentTransaction.commit();
+                        return true;
+
 
                 }
                 return false;
-
-
             }
-
         });
     }
+
     void logoutApp()
     {
         Token token=sharedPrefManager.getUser();

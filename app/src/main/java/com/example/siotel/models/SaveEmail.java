@@ -1,10 +1,14 @@
 package com.example.siotel.models;
 
+import com.google.gson.annotations.SerializedName;
+
 public class SaveEmail {
+
+    @SerializedName("email")  // Ensure this matches the API key
     String email;
 
-    public SaveEmail() {
-    }
+//    public SaveEmail() {
+//    }
 
     public SaveEmail(String email) {
         this.email = email;
