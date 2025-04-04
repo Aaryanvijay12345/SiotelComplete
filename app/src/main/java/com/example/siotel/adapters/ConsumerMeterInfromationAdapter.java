@@ -43,6 +43,11 @@ public class ConsumerMeterInfromationAdapter extends RecyclerView.Adapter<Consum
     @Override
     public void onBindViewHolder(@NonNull MDViewHolder holder, int position) {
         if (position == 0) {
+
+            holder.metersn.setBackgroundColor(Color.argb(40,40,40,40));
+            holder.cum_eb_kwh.setBackgroundColor(Color.argb(40,40,40,40));
+            holder.balance_amount.setBackgroundColor(Color.argb(40,40,40,40));
+            holder.date.setBackgroundColor(Color.argb(40,40,40,40));
             // Header row
             holder.metersn.setText("Meter Sno.");
             holder.balance_amount.setText("Amount"); // Adjusted to match query

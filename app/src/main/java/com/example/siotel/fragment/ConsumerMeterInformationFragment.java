@@ -4,6 +4,13 @@ import static androidx.fragment.app.FragmentManager.TAG;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Typeface;
+import android.graphics.pdf.PdfDocument;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +25,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,16 +40,21 @@ import com.example.siotel.api.PostRequestApi;
 import com.example.siotel.models.ConsumerMeterInformationModel;
 import com.example.siotel.models.HouseholdsDetailsModel;
 import com.example.siotel.models.HouseholdsModel;
+import com.example.siotel.models.ReportResponse;
 import com.example.siotel.models.SaveEmail;
 import com.example.siotel.models.Token;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
 
 import okhttp3.MediaType;
@@ -55,6 +68,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import java.util.Set;
 
 public class ConsumerMeterInformationFragment extends Fragment {
 
@@ -63,11 +77,14 @@ public class ConsumerMeterInformationFragment extends Fragment {
     private Spinner spinnerSite, spinnerYear;
     private AutoCompleteTextView autoCompleteMeterSNO;
     private EditText startDate, endDate;
-    private Button btnGetReport;
+    private Button btnGetReport, btnDownload;
     private SharedPrefManager sharedPrefManager;
     private List<String> meterSNOList = new ArrayList<>();
 
-    @SuppressLint("RestrictedApi")
+    private List<String> siteNameList = new ArrayList<>();
+    private List<ConsumerMeterInformationModel> reportList;
+
+    @SuppressLint({"RestrictedApi", "MissingInflatedId"})
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -86,9 +103,10 @@ public class ConsumerMeterInformationFragment extends Fragment {
         startDate = view.findViewById(R.id.edittext_start_date);
         endDate = view.findViewById(R.id.edittext_end_date);
         btnGetReport = view.findViewById(R.id.button_get_report);
+        btnDownload = view.findViewById(R.id.btnExportExcel1);
 
         setupSpinner(spinnerYear, new String[]{"2024-2025", "2025-2026", "2026-2027"});
-        setupSpinner(spinnerSite, new String[]{"Grand Anukampa"});
+        fetchSiteName();
 
         fetchMeterSNOs();
         setupDatePicker(startDate);
@@ -97,6 +115,8 @@ public class ConsumerMeterInformationFragment extends Fragment {
         btnGetReport.setOnClickListener(v ->{
             Log.d(TAG, "onClick: Get Report button clicked");
             generateReport();} );
+
+        btnDownload.setOnClickListener(v -> exportToPDF());
 
         return view;
     }
@@ -174,6 +194,7 @@ public class ConsumerMeterInformationFragment extends Fragment {
                 Log.d(TAG, "Response Code: " + response.code());
                 Log.d(TAG, "Response Message: " + response.message());
                 if (response.isSuccessful() && response.body() != null) {
+                    reportList = response.body();
                     Log.d(TAG, "Data fetched successfully: " + response.body().toString());
                     adapter.updateData(response.body());
                 } else {
@@ -262,6 +283,205 @@ public class ConsumerMeterInformationFragment extends Fragment {
 
     private void updateRecyclerView(List<ConsumerMeterInformationModel> detailsList) {
         adapter.updateData(detailsList);
+    }
+
+    private void fetchSiteName() {
+        Token token = sharedPrefManager.getUser();
+        String tokenStr = "Bearer " + token.getToken();
+        SaveEmail saveEmail = new SaveEmail(token.getEmail());
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://meters.siotel.in")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        PostRequestApi requestApi = retrofit.create(PostRequestApi.class);
+        Call<List<HouseholdsModel>> call = requestApi.getAllSites(tokenStr, saveEmail);
+
+        call.enqueue(new Callback<List<HouseholdsModel>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<HouseholdsModel>> call, @NonNull Response<List<HouseholdsModel>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Gson gson = new Gson();
+                    String json = gson.toJson(response.body());
+                    Log.d("ReportFragment", "Response JSON: " + json);
+                    List<HouseholdsModel> households = response.body();
+                    Log.d("ReportFragment", "Number of households: " + households.size());
+                    Set<String> siteSet = new HashSet<>();
+                    for (HouseholdsModel model : households) {
+                        String siteName = model.getSiteName();
+                        if (siteName != null) {
+                            siteSet.add(siteName);
+                            Log.d("ReportFragment", "Added site name: " + siteName);
+                        } else {
+                            Log.d("ReportFragment", "Found null site name");
+                        }
+                    }
+                    siteNameList.clear();
+                    siteNameList.addAll(siteSet);
+                    Log.d("ReportFragment", "siteNameList size: " + siteNameList.size());
+
+                    // Set up the spinner adapter
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
+                            android.R.layout.simple_spinner_item, siteNameList);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinnerSite.setAdapter(adapter);
+                } else {
+                    Log.e("ReportFragment", "Failed to fetch site names: " + response.code());
+                    Toast.makeText(getContext(), "Failed to fetch site names", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<HouseholdsModel>> call, @NonNull Throwable t) {
+                Toast.makeText(getContext(), "Check your internet connection", Toast.LENGTH_SHORT).show();
+                Log.e("ReportFragment", "Error: " + t.getMessage());
+            }
+        });
+
+    }
+
+    private void exportToPDF() {
+        if (reportList == null || reportList.isEmpty()) {
+            Toast.makeText(getContext(), "Please generate the report first", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Create a new PDF document
+        PdfDocument document = new PdfDocument();
+        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(595, 842, 1).create(); // A4 portrait
+        PdfDocument.Page page = document.startPage(pageInfo);
+        Canvas canvas = page.getCanvas();
+
+        // Define Paint objects for styling
+        Paint borderPaint = new Paint();
+        borderPaint.setStyle(Paint.Style.STROKE);
+        borderPaint.setColor(Color.BLACK);
+        borderPaint.setStrokeWidth(1);
+
+        Paint headerFillPaint = new Paint();
+        headerFillPaint.setStyle(Paint.Style.FILL);
+        headerFillPaint.setColor(Color.LTGRAY);
+
+        Paint headerPaint = new Paint();
+        headerPaint.setColor(Color.BLACK);
+        headerPaint.setTextSize(7);
+        headerPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+
+        Paint textPaint = new Paint();
+        textPaint.setColor(Color.BLACK);
+        textPaint.setTextSize(7);
+
+        // Define headers for the table
+        String[] headers = {"MeterSno", "Amount", "Cum_eb_kwh", "Date"};
+
+        // Define table position and dimensions
+        float startX = 20;
+        float startY = 20;
+        float colWidth = 100;
+        int numCols = 4;
+        float rowHeight = 20;
+
+        // Calculate the number of rows that can fit on one page (including header)
+        float pageHeight = pageInfo.getPageHeight();
+        float usableHeight = pageHeight - startY * 2; // Account for top and bottom margins
+        int rowsPerPage = (int) (usableHeight / rowHeight) - 1; // -1 for header row
+
+        int numDataRows = reportList.size();
+        int currentRow = 0;
+        int pageNumber = 1;
+
+        while (currentRow < numDataRows) {
+            // Start a new page if necessary
+            if (currentRow > 0) {
+                document.finishPage(page);
+                pageInfo = new PdfDocument.PageInfo.Builder(595, 842, pageNumber + 1).create();
+                page = document.startPage(pageInfo);
+                canvas = page.getCanvas();
+                startY = 20; // Reset startY for new page
+            }
+
+            // Draw header background
+            canvas.drawRect(startX, startY, startX + numCols * colWidth, startY + rowHeight, headerFillPaint);
+
+            // Draw header text
+            for (int i = 0; i < numCols; i++) {
+                float x = startX + i * colWidth + 2;
+                float y = startY + 15;
+                canvas.drawText(headers[i], x, y, headerPaint);
+            }
+
+            // Calculate how many rows to draw on this page
+            int rowsToDraw = Math.min(rowsPerPage, numDataRows - currentRow);
+            if (currentRow == 0 && rowsToDraw < numDataRows) {
+                rowsToDraw--; // Exclude the last row on the first page to repeat it on the next
+            }
+
+            // Draw outer border for the table on this page
+            float tableHeight = (rowsToDraw + 1) * rowHeight; // +1 for header
+            canvas.drawRect(startX, startY, startX + numCols * colWidth, startY + tableHeight, borderPaint);
+
+            // Draw vertical lines
+            for (int i = 1; i < numCols; i++) {
+                float x = startX + i * colWidth;
+                canvas.drawLine(x, startY, x, startY + tableHeight, borderPaint);
+            }
+
+            // Draw internal horizontal lines
+            for (int i = 1; i <= rowsToDraw; i++) {
+                float y = startY + i * rowHeight;
+                canvas.drawLine(startX, y, startX + numCols * colWidth, y, borderPaint);
+            }
+
+            // Draw data rows
+            for (int row = 0; row < rowsToDraw; row++) {
+                ConsumerMeterInformationModel report = reportList.get(currentRow + row);
+                String[] data = new String[4];
+                data[0] = report.getMeterSN() != null ? report.getMeterSN() : "N/A";
+                data[1] = String.valueOf(report.getBalance_amount());
+                data[2] = String.valueOf(report.getCum_eb_kwh());
+                data[3] = report.getDate() != null ? report.getDate() : "N/A";
+
+                for (int col = 0; col < numCols; col++) {
+                    float x = startX + col * colWidth + 2;
+                    float y = startY + (row + 1) * rowHeight + 15; // +1 to offset for header
+                    canvas.drawText(data[col], x, y, textPaint);
+                }
+            }
+
+            // Move to the next set of rows, ensuring the last row is repeated on the next page
+            if (currentRow == 0 && rowsToDraw < numDataRows) {
+                currentRow += rowsToDraw; // First page: skip to the last row to repeat it
+            } else {
+                currentRow += rowsToDraw + 1; // Subsequent pages: include the repeated row
+            }
+            pageNumber++;
+        }
+
+        // Finalize the last page
+        document.finishPage(page);
+
+        // Save and share the PDF
+        File cacheDir = requireContext().getCacheDir();
+        File pdfFile = new File(cacheDir, "report.pdf");
+        try {
+            document.writeTo(new FileOutputStream(pdfFile));
+            document.close();
+            sharePdfFile(pdfFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(getContext(), "Error creating PDF", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void sharePdfFile(File pdfFile) {
+        String authority = requireContext().getPackageName() + ".fileprovider";
+        Uri uri = FileProvider.getUriForFile(requireContext(), authority, pdfFile);
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("application/pdf");
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        startActivity(Intent.createChooser(intent, "Share PDF"));
     }
 
 }

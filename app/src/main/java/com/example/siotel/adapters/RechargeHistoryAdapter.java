@@ -1,5 +1,6 @@
 package com.example.siotel.adapters;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +52,12 @@ public class RechargeHistoryAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             headerHolder.textViewDevid.setText("Device ID");
             headerHolder.textViewDate.setText("Date");
             headerHolder.textViewAmount.setText("Amount");
+
+            // Set background color for the header
+            headerHolder.textViewHouse.setBackgroundColor(Color.argb(40, 40, 40, 40));
+            headerHolder.textViewDevid.setBackgroundColor(Color.argb(40, 40, 40, 40));
+            headerHolder.textViewDate.setBackgroundColor(Color.argb(40, 40, 40, 40));
+            headerHolder.textViewAmount.setBackgroundColor(Color.argb(40, 40, 40, 40));
         } else if (holder instanceof ItemViewHolder) {
             ItemViewHolder itemHolder = (ItemViewHolder) holder;
             // Adjust position by -1 since header takes position 0

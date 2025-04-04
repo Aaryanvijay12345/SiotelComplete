@@ -1,5 +1,6 @@
 package com.example.siotel.adapters;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,6 +61,30 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
             holder.tvTotalCamAmount.setText("CAM Recharge");
             holder.tvTotalExceptCamAmount.setText("Electricity Recharge");
             holder.tvTotalAmount.setText("Total Amt.");
+
+
+            // Set background color for the header
+            int bgColor = Color.argb(40, 40, 40, 40);
+            holder.tvSno.setBackgroundColor(bgColor);
+            holder.tvEbKwhOpen.setBackgroundColor(bgColor);
+            holder.tvEbKwhClose.setBackgroundColor(bgColor);
+            holder.tvConEbKwh.setBackgroundColor(bgColor);
+            holder.tvDgKwhOpen.setBackgroundColor(bgColor);
+            holder.tvDgKwhClose.setBackgroundColor(bgColor);
+            holder.tvConDgKwh.setBackgroundColor(bgColor);
+            holder.tvEbTf.setBackgroundColor(bgColor);
+            holder.tvDgTf.setBackgroundColor(bgColor);
+            holder.tvDcTf.setBackgroundColor(bgColor);
+            holder.tvAmountOpen.setBackgroundColor(bgColor);
+            holder.tvAmountClose.setBackgroundColor(bgColor);
+            holder.tvActivateDays.setBackgroundColor(bgColor);
+            holder.tvNetAmount.setBackgroundColor(bgColor);
+            holder.tvTotalRecharge.setBackgroundColor(bgColor);
+            holder.tvActualStartDate.setBackgroundColor(bgColor);
+            holder.tvActualEndDate.setBackgroundColor(bgColor);
+            holder.tvTotalCamAmount.setBackgroundColor(bgColor);
+            holder.tvTotalExceptCamAmount.setBackgroundColor(bgColor);
+            holder.tvTotalAmount.setBackgroundColor(bgColor);
         } else {
             // Bind data rows
             ReportResponse report = reportList.get(position - 1); // Offset by 1 for header
@@ -97,6 +122,11 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
             reportList.addAll(newData);
         }
         notifyDataSetChanged();
+    }
+
+    // Add this method to access the data
+    public List<ReportResponse> getData() {
+        return reportList;
     }
 
     static class ReportViewHolder extends RecyclerView.ViewHolder {

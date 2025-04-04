@@ -1,111 +1,51 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:background="@color/lightGray">
+    android:layout_height="match_parent">
 
-    <!-- Title -->
-    <TextView
-        android:id="@+id/tv_title"
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+    <HorizontalScrollView
+        android:id="@+id/horizontal_scroll_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="All Orders / Change Order Status"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:textColor="@color/darkBlue"
-        android:gravity="center"
-        android:paddingBottom="12dp" />
+        android:scrollbars="horizontal"
+        android:layout_alignParentTop="true">
 
-    <!-- Scrollable Table -->
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fillViewport="true">
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:fillViewport="true">
 
-        <HorizontalScrollView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:scrollbars="horizontal">
-
-            <TableLayout
-                android:id="@+id/tableLayout"
-                android:layout_width="wrap_content"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:stretchColumns="*"
-                android:background="@android:color/white"
-                android:elevation="4dp">
+                android:nestedScrollingEnabled="true"/>
 
-                <!-- Table Header -->
-                <TableRow
-                    android:background="@drawable/header_bg"
-                    android:padding="12dp"
-                    android:layout_marginBottom="4dp">
+        </androidx.core.widget.NestedScrollView>
 
-                    <TextView android:text="INVOICE" style="@style/TableHeader"/>
-                    <TextView android:text="CUSTOMER" style="@style/TableHeader"/>
-                    <TextView android:text="ADDRESS" style="@style/TableHeader"/>
-                    <TextView android:text="INVOICE DATE" style="@style/TableHeader"/>
-                    <TextView android:text="DUE DATE" style="@style/TableHeader"/>
-                    <TextView android:text="TOTAL AMOUNT" style="@style/TableHeader"/>
-                    <TextView android:text="STATUS" style="@style/TableHeader"/>
-                    <TextView android:text="VIEW" style="@style/TableHeader"/>
-                    <TextView android:text="DOWNLOAD" style="@style/TableHeader"/>
-                </TableRow>
+    </HorizontalScrollView>
 
-                <!-- Sample Table Row -->
-                <TableRow
-                    android:background="@drawable/table_row_bg"
-                    android:padding="10dp"
-                    android:layout_marginBottom="4dp"
-                    android:showDividers="middle"
-                    android:divider="@android:color/darker_gray"
-                    android:dividerPadding="5dp">
-
-                    <TextView android:text="#27" style="@style/TableCell"/>
-                    <TextView android:text="UG_01" style="@style/TableCell"/>
-                    <TextView android:text="506F980000006FC5" style="@style/TableCell"/>
-                    <TextView android:text="Aug. 1, 2022" style="@style/TableCell"/>
-                    <TextView android:text="Aug. 25, 2022" style="@style/TableCell"/>
-                    <TextView android:text="₹25,939.35" style="@style/TableCell"/>
-
-                    <TextView
-                        android:text="Paid"
-                        android:background="@drawable/status_paid_bg"
-                        android:padding="6dp"
-                        android:textColor="@android:color/white"
-                        android:gravity="center"
-                        android:layout_width="80dp"
-                    android:layout_height="wrap_content"/>
-
-                    <Button
-                        android:text="View"
-                        android:background="@drawable/button_blue"
-                        android:textColor="@android:color/white"
-                        android:padding="6dp"
-                        android:layout_width="80dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"/>  <!-- Added margin for spacing -->
-
-                    <TextView android:text="Download"
-                        android:textColor="@color/darkBlue"
-                        android:gravity="center"
-                        android:layout_width="wrap_content"/>
-                </TableRow>
-
-            </TableLayout>
-
-        </HorizontalScrollView>
-    </ScrollView>
-
-    <!-- Home Dashboard Button -->
-    <Button
-        android:id="@+id/btn_dashboard"
+    <HorizontalScrollView
+        android:id="@+id/horizontal_scroll_2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Home Dashboard"
-        android:textColor="@android:color/white"
-        android:padding="14dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/button_blue"/>
-</LinearLayout>
+        android:scrollbars="horizontal"
+        android:layout_below="@id/horizontal_scroll_1"
+        android:layout_marginTop="20dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"/>
+
+    </HorizontalScrollView>
+
+</RelativeLayout>

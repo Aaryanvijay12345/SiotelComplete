@@ -1,11 +1,18 @@
 package com.example.siotel.models;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
+
 public class ConsumerMeterInformationModel {
 
-    String MeterSN;
-    double cum_eb_kwh;
-    double balance_amount;
-    String date;
+    private String MeterSN;
+    private double cum_eb_kwh;
+    private double balance_amount;
+    private String date;
+
+    @SerializedName("usage_entries")
+    private List<UsageEntry> usageEntries;
 
 
 
@@ -53,5 +60,7 @@ public class ConsumerMeterInformationModel {
     public void setDate(String date) {
         this.date = date;
     }
+
+    public List<UsageEntry> getUsageEntries() { return usageEntries; }
 
 }

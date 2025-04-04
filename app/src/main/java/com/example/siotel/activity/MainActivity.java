@@ -35,6 +35,8 @@ import com.example.siotel.api.PostRequestApi;
 import com.example.siotel.connectapi.AllApiConnect;
 import com.example.siotel.fragment.BalanceFragment;
 import com.example.siotel.fragment.ConsumerMeterInformationFragment;
+import com.example.siotel.fragment.ContactFragment;
+import com.example.siotel.fragment.CreateFragment;
 import com.example.siotel.fragment.DashboardFragment;
 import com.example.siotel.fragment.HouseholdsFragment;
 import com.example.siotel.fragment.InvoiceListFragment;
@@ -258,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.contact:
                         getSupportFragmentManager().popBackStack();
-                        fragmentTransaction.replace(R.id.fragmentContainerView, new BalanceFragment());
+                        fragmentTransaction.replace(R.id.fragmentContainerView, new ContactFragment());
                         fragmentTransaction.commit();
                         return true;
 
@@ -277,7 +279,7 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.menu_create_invoice:
 //                        Toast.makeText(MainActivity.this, "Create Invoice Clicked", Toast.LENGTH_SHORT).show();
                         getSupportFragmentManager().popBackStack();
-                        fragmentTransaction.replace(R.id.fragmentContainerView, new ReportFragment());
+                        fragmentTransaction.replace(R.id.fragmentContainerView, new CreateFragment());
                         fragmentTransaction.commit();
                         return true;
 
@@ -286,6 +288,7 @@ public class MainActivity extends AppCompatActivity {
                         fragmentTransaction.replace(R.id.fragmentContainerView, new InvoiceListFragment());
                         fragmentTransaction.commit();
                         return true;
+
 
 //                    case R.id.menu_invoice_list:
 //                        // Open the Invoice List website in the browser

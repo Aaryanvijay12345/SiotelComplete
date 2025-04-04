@@ -1,5 +1,9 @@
 package com.example.siotel.models;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
+
 public class ReportResponse {
     private String sno;
     private double Eb_kwh_open;
@@ -22,6 +26,27 @@ public class ReportResponse {
     private double total_except_cam_amount;
     private double total_amount;
 
+    @SerializedName("usage_entries")
+    private List<UsageEntry> usageEntries;
+
+    private double ebKwhOpen;        // Opening electricity board (EB) kWh reading
+    private double ebKwhClose;       // Closing electricity board (EB) kWh reading
+    private double dgKwhOpen;        // Opening diesel generator (DG) kWh reading
+    private double dgKwhClose;       // Closing diesel generator (DG) kWh reading
+    private double ebTf;             // EB tariff rate per kWh
+    private double dgTf;             // DG tariff rate per kWh
+    private double dcTf;             // Demand charge tariff
+    private double amountOpen;       // Opening amount (e.g., previous balance)
+    private double amountClose;      // Closing amount (e.g., current balance)
+    private double totalRecharge;    // Total recharge amount
+    private String actualStartDate;  // Actual start date of the billing period
+    private String actualEndDate;    // Actual end date of the billing period
+    private double totalCamAmount;   // Total CAM (Common Area Maintenance) amount
+    private double totalExceptCamAmount; // Total amount excluding CAM
+
+
+
+
     // Getters
     public String getSno() { return sno; }
     public double getEb_kwh_open() { return Eb_kwh_open; }
@@ -43,4 +68,25 @@ public class ReportResponse {
     public double getTotal_cam_amount() { return total_cam_amount; }
     public double getTotal_except_cam_amount() { return total_except_cam_amount; }
     public double getTotal_amount() { return total_amount; }
+
+    public List<UsageEntry> getUsageEntries() { return usageEntries; }
+
+
+
+    public double getEbKwhOpen() { return ebKwhOpen; }
+    public double getEbKwhClose() { return ebKwhClose; }
+    public double getDgKwhOpen() { return dgKwhOpen; }
+    public double getDgKwhClose() { return dgKwhClose; }
+    public double getEbTf() { return ebTf; }
+    public double getDgTf() { return dgTf; }
+    public double getDcTf() { return dcTf; }
+    public double getAmountOpen() { return amountOpen; }
+    public double getAmountClose() { return amountClose; }
+    public double getTotalRecharge() { return totalRecharge; }
+    public String getActualStartDate() { return actualStartDate; }
+    public String getActualEndDate() { return actualEndDate; }
+    public double getTotalCamAmount() { return totalCamAmount; }
+    public double getTotalExceptCamAmount() { return totalExceptCamAmount; }
+
+
 }

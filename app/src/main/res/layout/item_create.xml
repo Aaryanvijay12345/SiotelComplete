@@ -13,7 +13,7 @@
         android:layout_height="40dp">
 
         <TextView
-            android:id="@+id/text_invoice_id1"
+            android:id="@+id/text_meter_sno"
             android:layout_width="150dp"
             android:layout_height="match_parent"
             android:gravity="center"
@@ -25,7 +25,7 @@
 
 
         <TextView
-            android:id="@+id/text_customer1"
+            android:id="@+id/text_opening_ebkwh"
             android:layout_width="150dp"
             android:layout_height="match_parent"
             android:background="@drawable/tabletextview_border"
@@ -36,7 +36,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/text_billing_address1"
+            android:id="@+id/text_closing_ebkwh"
             android:layout_width="150dp"
             android:layout_height="match_parent"
             android:gravity="center"
@@ -48,7 +48,7 @@
 
 
         <TextView
-            android:id="@+id/text_date1"
+            android:id="@+id/text_eb_consumption"
             android:layout_width="150dp"
             android:layout_height="match_parent"
             android:gravity="center"
@@ -59,7 +59,7 @@
             android:textColor="@color/Black"/>
 
         <TextView
-            android:id="@+id/text_due_date1"
+            android:id="@+id/text_opening_dg"
             android:layout_width="150dp"
             android:layout_height="match_parent"
             android:gravity="center"
@@ -72,7 +72,7 @@
 
 
         <TextView
-            android:id="@+id/text_total_amount1"
+            android:id="@+id/text_closing_dg"
             android:layout_width="150dp"
             android:layout_height="match_parent"
             android:gravity="center"
@@ -83,7 +83,7 @@
             android:textColor="@color/Black"/>
 
         <TextView
-            android:id="@+id/text_status1"
+            android:id="@+id/text_dg_consumption"
             android:layout_width="150dp"
             android:layout_height="match_parent"
             android:gravity="center"
@@ -93,6 +93,61 @@
             android:text="TextView"
             android:textColor="@color/Black"/>
 
+        <TextView
+            android:id="@+id/text_eb_tariff"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="12dp"
+            android:background="@drawable/tabletextview_border"
+            android:textStyle="bold"
+            android:text="TextView"
+            android:textColor="@color/Black"/>
+
+
+
+        <TextView
+            android:id="@+id/text_dg_tariff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Download"
+            android:textColor="@android:color/holo_blue_dark"
+            android:padding="8dp"
+            android:clickable="true"
+            android:focusable="true"/>
+
+
+        <TextView
+            android:id="@+id/text_daily_charge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Download"
+            android:textColor="@android:color/holo_blue_dark"
+            android:padding="8dp"
+            android:clickable="true"
+            android:focusable="true"/>
+
+
+        <TextView
+            android:id="@+id/text_active_days"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Download"
+            android:textColor="@android:color/holo_blue_dark"
+            android:padding="8dp"
+            android:clickable="true"
+            android:focusable="true"/>
+
+
+        <TextView
+            android:id="@+id/text_net_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Download"
+            android:textColor="@android:color/holo_blue_dark"
+            android:padding="8dp"
+            android:clickable="true"
+            android:focusable="true"/>
 
     </LinearLayout>
 

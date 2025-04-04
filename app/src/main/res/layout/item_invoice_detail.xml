@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardview_devices_rv"
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="0dp"
+        android:orientation="horizontal"
+        android:layout_height="40dp">
+
+        <TextView
+            android:id="@+id/text_id"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="12dp"
+            android:background="@drawable/tabletextview_border"
+            android:textStyle="bold"
+            android:text="TextView"
+            android:textColor="@color/Black"/>
+
+
+        <TextView
+            android:id="@+id/text_customer"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/tabletextview_border"
+            android:gravity="center"
+            android:text="TextView"
+            android:textColor="@color/Black"
+            android:textSize="12dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/text_customer_email"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="12dp"
+            android:background="@drawable/tabletextview_border"
+            android:textStyle="bold"
+            android:text="TextView"
+            android:textColor="@color/Black"/>
+
+
+        <TextView
+            android:id="@+id/text_billing_address"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="12dp"
+            android:background="@drawable/tabletextview_border"
+            android:textStyle="bold"
+            android:text="TextView"
+            android:textColor="@color/Black"/>
+
+        <TextView
+            android:id="@+id/text_date"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="12dp"
+            android:background="@drawable/tabletextview_border"
+            android:textStyle="bold"
+            android:text="TextView"
+            android:textColor="@color/Black"/>
+
+
+
+        <TextView
+            android:id="@+id/text_due_date"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="12dp"
+            android:background="@drawable/tabletextview_border"
+            android:textStyle="bold"
+            android:text="TextView"
+            android:textColor="@color/Black"/>
+
+        <TextView
+            android:id="@+id/text_message"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="12dp"
+            android:background="@drawable/tabletextview_border"
+            android:textStyle="bold"
+            android:text="TextView"
+            android:textColor="@color/Black"/>
+
+        <TextView
+            android:id="@+id/text_status"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="12dp"
+            android:background="@drawable/tabletextview_border"
+            android:textStyle="bold"
+            android:text="TextView"
+            android:textColor="@color/Black"/>
+
+        <TextView
+            android:id="@+id/text_admin_email"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="12dp"
+            android:background="@drawable/tabletextview_border"
+            android:textStyle="bold"
+            android:text="TextView"
+            android:textColor="@color/Black"/>
+
+        <TextView
+            android:id="@+id/text_sno"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="12dp"
+            android:background="@drawable/tabletextview_border"
+            android:textStyle="bold"
+            android:text="TextView"
+            android:textColor="@color/Black"/>
+
+        <TextView
+            android:id="@+id/text_open_kwheb"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="12dp"
+            android:background="@drawable/tabletextview_border"
+            android:textStyle="bold"
+            android:text="TextView"
+            android:textColor="@color/Black"/>
+
+        <TextView
+            android:id="@+id/text_close_kwheb"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="12dp"
+            android:background="@drawable/tabletextview_border"
+            android:textStyle="bold"
+            android:text="TextView"
+            android:textColor="@color/Black"/>
+
+        <TextView
+            android:id="@+id/text_con_kwheb"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="12dp"
+            android:background="@drawable/tabletextview_border"
+            android:textStyle="bold"
+            android:text="TextView"
+            android:textColor="@color/Black"/>
+
+        <TextView
+            android:id="@+id/text_dgt"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="12dp"
+            android:background="@drawable/tabletextview_border"
+            android:textStyle="bold"
+            android:text="TextView"
+            android:textColor="@color/Black"/>
+
+        <TextView
+            android:id="@+id/text_mc"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="12dp"
+            android:background="@drawable/tabletextview_border"
+            android:textStyle="bold"
+            android:text="TextView"
+            android:textColor="@color/Black"/>
+
+        <TextView
+            android:id="@+id/text_actday"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="12dp"
+            android:background="@drawable/tabletextview_border"
+            android:textStyle="bold"
+            android:text="TextView"
+            android:textColor="@color/Black"/>
+
+        <TextView
+            android:id="@+id/text_total_amount"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="12dp"
+            android:background="@drawable/tabletextview_border"
+            android:textStyle="bold"
+            android:text="TextView"
+            android:textColor="@color/Black"/>
+
+        <TextView
+            android:id="@+id/text_ebt"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="12dp"
+            android:background="@drawable/tabletextview_border"
+            android:textStyle="bold"
+            android:text="TextView"
+            android:textColor="@color/Black"/>
+
+        <TextView
+            android:id="@+id/text_sitename"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="12dp"
+            android:background="@drawable/tabletextview_border"
+            android:textStyle="bold"
+            android:text="TextView"
+            android:textColor="@color/Black"/>
+
+        <TextView
+            android:id="@+id/text_start_date"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="12dp"
+            android:background="@drawable/tabletextview_border"
+            android:textStyle="bold"
+            android:text="TextView"
+            android:textColor="@color/Black"/>
+
+        <TextView
+            android:id="@+id/text_end_date"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="12dp"
+            android:background="@drawable/tabletextview_border"
+            android:textStyle="bold"
+            android:text="TextView"
+            android:textColor="@color/Black"/>
+
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

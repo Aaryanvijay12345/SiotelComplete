@@ -34,6 +34,7 @@ import com.example.siotel.models.RechargeHistoryItem;
 import com.example.siotel.models.ReportRequest;
 import com.example.siotel.models.SaveEmail;
 import com.example.siotel.models.Token;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import org.json.JSONException;
@@ -42,6 +43,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
 
 import okhttp3.MediaType;
@@ -55,6 +57,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import java.util.Set;
 
 public class RechargeReportFragment extends Fragment {
 
@@ -66,6 +69,8 @@ public class RechargeReportFragment extends Fragment {
     private Button btnGetReport;
     private SharedPrefManager sharedPrefManager;
     private List<String> meterSNOList = new ArrayList<>();
+
+    private List<String> siteNameList = new ArrayList<>();
 
     @SuppressLint("RestrictedApi")
     @Nullable
@@ -88,7 +93,7 @@ public class RechargeReportFragment extends Fragment {
         btnGetReport = view.findViewById(R.id.button_get_report2);
 
         setupSpinner(spinnerYear, new String[]{"2024-2025", "2025-2026", "2026-2027"});
-        setupSpinner(spinnerSite, new String[]{"Grand Anukampa"});
+        fetchSiteName();
 
         fetchMeterSNOs();
         setupDatePicker(startDate);
@@ -261,6 +266,62 @@ public class RechargeReportFragment extends Fragment {
 
     private void updateRecyclerView(List<RechargeHistoryItem> detailsList) {
         adapter.updateData(detailsList);
+    }
+
+    private void fetchSiteName() {
+        Token token = sharedPrefManager.getUser();
+        String tokenStr = "Bearer " + token.getToken();
+        SaveEmail saveEmail = new SaveEmail(token.getEmail());
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://meters.siotel.in")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        PostRequestApi requestApi = retrofit.create(PostRequestApi.class);
+        Call<List<HouseholdsModel>> call = requestApi.getAllSites(tokenStr, saveEmail);
+
+        call.enqueue(new Callback<List<HouseholdsModel>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<HouseholdsModel>> call, @NonNull Response<List<HouseholdsModel>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Gson gson = new Gson();
+                    String json = gson.toJson(response.body());
+                    Log.d("ReportFragment", "Response JSON: " + json);
+                    List<HouseholdsModel> households = response.body();
+                    Log.d("ReportFragment", "Number of households: " + households.size());
+                    Set<String> siteSet = new HashSet<>();
+                    for (HouseholdsModel model : households) {
+                        String siteName = model.getSiteName();
+                        if (siteName != null) {
+                            siteSet.add(siteName);
+                            Log.d("ReportFragment", "Added site name: " + siteName);
+                        } else {
+                            Log.d("ReportFragment", "Found null site name");
+                        }
+                    }
+                    siteNameList.clear();
+                    siteNameList.addAll(siteSet);
+                    Log.d("ReportFragment", "siteNameList size: " + siteNameList.size());
+
+                    // Set up the spinner adapter
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
+                            android.R.layout.simple_spinner_item, siteNameList);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinnerSite.setAdapter(adapter);
+                } else {
+                    Log.e("ReportFragment", "Failed to fetch site names: " + response.code());
+                    Toast.makeText(getContext(), "Failed to fetch site names", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<HouseholdsModel>> call, @NonNull Throwable t) {
+                Toast.makeText(getContext(), "Check your internet connection", Toast.LENGTH_SHORT).show();
+                Log.e("ReportFragment", "Error: " + t.getMessage());
+            }
+        });
+
     }
 
 }

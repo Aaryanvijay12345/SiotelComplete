@@ -7,7 +7,7 @@
     android:padding="16dp"
     app:cardCornerRadius="12dp"
     app:cardElevation="4dp"
-    tools:context=".fragment.ReportFragment">
+    tools:context=".fragment.RechargeReportFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -31,7 +31,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Consumption History"
+                    android:text="Create Invoice"
                     android:layout_gravity="center"
                     android:textStyle="bold"
                     android:textSize="18sp"
@@ -178,18 +178,72 @@
                 <!-- Download Button Below RecyclerView -->
             </com.google.android.material.card.MaterialCardView>
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="20dp">
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnExportExcel"
                 style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/teal_700"
+                android:text="Reciept"
+                android:textColor="@android:color/white"
+                app:cornerRadius="8dp"
+                android:layout_marginEnd="10dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCreateInvoice"
+                style="@style/Widget.MaterialComponents.Button"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="10dp"
-                android:backgroundTint="@color/teal_700"
-                android:text="Download"
-                android:textColor="@android:color/white"
+                android:backgroundTint="@color/Gold"
+                android:text="Show Invoice"
+                android:textColor="@android:color/black"
                 app:cornerRadius="8dp" />
         </LinearLayout>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp"
+                android:layout_marginTop="20dp">
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="horizontal">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerViewInvoice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="true" />
+                </HorizontalScrollView>
+
+                <!-- Download Button Below RecyclerView -->
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCreateInvoice1"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/Gold"
+                android:text="Create Invoice"
+                android:textColor="@android:color/black"
+                app:cornerRadius="8dp" />
+
+
+
+        </LinearLayout>
+
+
     </ScrollView>
 </com.google.android.material.card.MaterialCardView>

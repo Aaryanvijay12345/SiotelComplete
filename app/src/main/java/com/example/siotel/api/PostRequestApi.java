@@ -1,9 +1,14 @@
 package com.example.siotel.api;
 
 import com.example.siotel.models.ConsumerMeterInformationModel;
+import com.example.siotel.models.EmailRequest;
 import com.example.siotel.models.HRHDetailsModel;
 import com.example.siotel.models.HouseholdsModel;
 import com.example.siotel.models.HouseholdsDetailsModel;
+import com.example.siotel.models.Invoice;
+import com.example.siotel.models.InvoiceDetail;
+import com.example.siotel.models.InvoiceRequest;
+import com.example.siotel.models.InvoiceResponse;
 import com.example.siotel.models.LoginModel;
 import com.example.siotel.models.PayModel;
 import com.example.siotel.models.RechargeHistoryItem;
@@ -28,7 +33,6 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
-import retrofit2.http.Query;
 import retrofit2.http.Url;
 
 public interface PostRequestApi {
@@ -86,6 +90,33 @@ public interface PostRequestApi {
           @Header("Authorization") String token,
           @Body ReportRequest request
   );
+
+  @POST("houseListApi/")
+  Call<List<HouseholdsModel>> getAllSites(
+          @Header("Authorization") String token,
+          @Body SaveEmail saveEmail);
+
+  @POST("invoice/invoice-list-API/")
+  Call<List<Invoice>> getInvoiceList(
+          @Header("Authorization") String token,
+          @Body EmailRequest emailRequest
+  );
+
+  @GET("invoice/invoice-detail-API/{id}")
+  Call<InvoiceDetail> getInvoiceDetail(@Path("id") int invoiceId);
+
+  // New method for invoice
+  // New method for invoice creation
+  @POST("invoice/InvoiceMidAPI/")
+  Call<InvoiceResponse> createInvoice(
+          @Header("Authorization") String token,
+          @Body InvoiceRequest request
+  );
+
+
+
+
+
 
 
 //  @GET("MeterdataApi/{meterSno}")
