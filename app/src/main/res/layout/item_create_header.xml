@@ -4,8 +4,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
 android:id="@+id/cardview_devices_rv"
 
 android:layout_width="match_parent"
-android:layout_height="wrap_content"
-    android:background="@color/gray">
+android:layout_height="wrap_content">
 
 <LinearLayout
     android:layout_width="match_parent"
@@ -20,7 +19,7 @@ android:layout_height="wrap_content"
         android:textSize="12dp"
         android:background="@drawable/tabletextview_border"
         android:textStyle="bold"
-        android:text="Id"
+        android:text="Sno"
         android:textColor="@color/Black"/>
 
 
@@ -29,7 +28,7 @@ android:layout_height="wrap_content"
         android:layout_height="match_parent"
         android:background="@drawable/tabletextview_border"
         android:gravity="center"
-        android:text="Customer"
+        android:text="Opening EBKwh"
         android:textColor="@color/Black"
         android:textSize="12dp"
         android:textStyle="bold" />
@@ -41,7 +40,7 @@ android:layout_height="wrap_content"
         android:textSize="12dp"
         android:background="@drawable/tabletextview_border"
         android:textStyle="bold"
-        android:text="Cust Email"
+        android:text="Closing EBKwh"
         android:textColor="@color/Black"/>
 
 
@@ -52,7 +51,7 @@ android:layout_height="wrap_content"
         android:textSize="12dp"
         android:background="@drawable/tabletextview_border"
         android:textStyle="bold"
-        android:text="Address"
+        android:text="EB Consumption"
         android:textColor="@color/Black"/>
 
     <TextView
@@ -62,7 +61,19 @@ android:layout_height="wrap_content"
         android:textSize="12dp"
         android:background="@drawable/tabletextview_border"
         android:textStyle="bold"
-        android:text="Invoice Date"
+        android:text="Opening DG"
+        android:textColor="@color/Black"/>
+
+
+
+    <TextView
+        android:layout_width="150dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textSize="12dp"
+        android:background="@drawable/tabletextview_border"
+        android:textStyle="bold"
+        android:text="Closing DG"
         android:textColor="@color/Black"/>
 
     <TextView
@@ -72,7 +83,7 @@ android:layout_height="wrap_content"
         android:textSize="12dp"
         android:background="@drawable/tabletextview_border"
         android:textStyle="bold"
-        android:text="Due Date"
+        android:text="DG Consumption"
         android:textColor="@color/Black"/>
 
     <TextView
@@ -82,7 +93,7 @@ android:layout_height="wrap_content"
         android:textSize="12dp"
         android:background="@drawable/tabletextview_border"
         android:textStyle="bold"
-        android:text="Message"
+        android:text="EB Tariff"
         android:textColor="@color/Black"/>
 
     <TextView
@@ -92,7 +103,7 @@ android:layout_height="wrap_content"
         android:textSize="12dp"
         android:background="@drawable/tabletextview_border"
         android:textStyle="bold"
-        android:text="Status"
+        android:text="DG Tariff"
         android:textColor="@color/Black"/>
 
     <TextView
@@ -102,68 +113,7 @@ android:layout_height="wrap_content"
         android:textSize="12dp"
         android:background="@drawable/tabletextview_border"
         android:textStyle="bold"
-        android:text="Ad Email"
-        android:textColor="@color/Black"/>
-
-    <TextView
-
-        android:layout_width="150dp"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:textSize="12dp"
-        android:background="@drawable/tabletextview_border"
-        android:textStyle="bold"
-        android:text="SNo"
-        android:textColor="@color/Black"/>
-
-    <TextView
-        android:layout_width="150dp"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:textSize="12dp"
-        android:background="@drawable/tabletextview_border"
-        android:textStyle="bold"
-        android:text="Open Kwheb"
-        android:textColor="@color/Black"/>
-
-    <TextView
-        android:layout_width="150dp"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:textSize="12dp"
-        android:background="@drawable/tabletextview_border"
-        android:textStyle="bold"
-        android:text="Close Kwheb"
-        android:textColor="@color/Black"/>
-
-    <TextView
-        android:layout_width="150dp"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:textSize="12dp"
-        android:background="@drawable/tabletextview_border"
-        android:textStyle="bold"
-        android:text="Con Kwheb"
-        android:textColor="@color/Black"/>
-
-    <TextView
-        android:layout_width="150dp"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:textSize="12dp"
-        android:background="@drawable/tabletextview_border"
-        android:textStyle="bold"
-        android:text="DGT"
-        android:textColor="@color/Black"/>
-
-    <TextView
-        android:layout_width="150dp"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:textSize="12dp"
-        android:background="@drawable/tabletextview_border"
-        android:textStyle="bold"
-        android:text="MC"
+        android:text="Daily Charge"
         android:textColor="@color/Black"/>
 
     <TextView
@@ -183,48 +133,10 @@ android:layout_height="wrap_content"
         android:textSize="12dp"
         android:background="@drawable/tabletextview_border"
         android:textStyle="bold"
-        android:text="Total Amt"
+        android:text="Net Amt"
         android:textColor="@color/Black"/>
 
-    <TextView
-        android:layout_width="150dp"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:textSize="12dp"
-        android:background="@drawable/tabletextview_border"
-        android:textStyle="bold"
-        android:text="EBT"
-        android:textColor="@color/Black"/>
 
-    <TextView
-        android:layout_width="150dp"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:textSize="12dp"
-        android:background="@drawable/tabletextview_border"
-        android:textStyle="bold"
-        android:text="SiteName"
-        android:textColor="@color/Black"/>
-
-    <TextView
-        android:layout_width="150dp"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:textSize="12dp"
-        android:background="@drawable/tabletextview_border"
-        android:textStyle="bold"
-        android:text="Start Date"
-        android:textColor="@color/Black"/>
-
-    <TextView
-        android:layout_width="150dp"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:textSize="12dp"
-        android:background="@drawable/tabletextview_border"
-        android:textStyle="bold"
-        android:text="End Date"
-        android:textColor="@color/Black"/>
 
 </LinearLayout>
 

@@ -236,12 +236,9 @@
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/Gold"
-                android:text="Create Invoice"
+                android:text="Create"
                 android:textColor="@android:color/black"
                 app:cornerRadius="8dp" />
-
-
-
         </LinearLayout>
 
 

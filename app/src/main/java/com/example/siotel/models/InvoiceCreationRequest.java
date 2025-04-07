@@ -2,7 +2,7 @@ package com.example.siotel.models;
 
 public class InvoiceCreationRequest {
     private String email;
-    private String sno;
+    private String meterSno;
     private String startdate;
     private String enddate;
     private String hname;
@@ -27,14 +27,13 @@ public class InvoiceCreationRequest {
     private String invoice_due;
 
     // Constructor
-    public InvoiceCreationRequest() {
-    }
+    public InvoiceCreationRequest() {}
 
     // Getters and Setters
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
-    public String getSno() { return sno; }
-    public void setSno(String sno) { this.sno = sno; }
+    public String getMeterSno() { return meterSno; }
+    public void setMeterSno(String meterSno) { this.meterSno = meterSno; }
     public String getStartdate() { return startdate; }
     public void setStartdate(String startdate) { this.startdate = startdate; }
     public String getEnddate() { return enddate; }
@@ -80,3 +79,4 @@ public class InvoiceCreationRequest {
     public String getInvoice_due() { return invoice_due; }
     public void setInvoice_due(String invoice_due) { this.invoice_due = invoice_due; }
 }
+

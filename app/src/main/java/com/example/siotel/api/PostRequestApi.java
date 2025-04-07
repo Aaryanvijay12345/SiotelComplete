@@ -6,6 +6,8 @@ import com.example.siotel.models.HRHDetailsModel;
 import com.example.siotel.models.HouseholdsModel;
 import com.example.siotel.models.HouseholdsDetailsModel;
 import com.example.siotel.models.Invoice;
+import com.example.siotel.models.InvoiceCreationRequest;
+import com.example.siotel.models.InvoiceCreationResponse;
 import com.example.siotel.models.InvoiceDetail;
 import com.example.siotel.models.InvoiceRequest;
 import com.example.siotel.models.InvoiceResponse;
@@ -111,6 +113,12 @@ public interface PostRequestApi {
   Call<InvoiceResponse> createInvoice(
           @Header("Authorization") String token,
           @Body InvoiceRequest request
+  );
+
+  @POST("invoice/create-invoice-API/")
+  Call<String> createInvoiceApi(
+          @Header("Authorization") String token,
+          @Body InvoiceCreationRequest request
   );
 
 

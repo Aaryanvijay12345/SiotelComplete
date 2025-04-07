@@ -446,7 +446,10 @@ import com.example.siotel.R;
 import com.example.siotel.models.InvoiceResponse;
 import java.util.List;
 
-public class CreateAdapter extends RecyclerView.Adapter<CreateAdapter.InvoiceViewHolder> {
+public class CreateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+    private static final int TYPE_HEADER = 0;
+    private static final int TYPE_ITEM = 1;
 
     private List<InvoiceResponse> invoiceList;
 
@@ -454,33 +457,47 @@ public class CreateAdapter extends RecyclerView.Adapter<CreateAdapter.InvoiceVie
         this.invoiceList = invoiceList;
     }
 
-    @NonNull
-    @Override
-    public InvoiceViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_create, parent, false);
-        return new InvoiceViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull InvoiceViewHolder holder, int position) {
-        InvoiceResponse invoice = invoiceList.get(position);
-
-        holder.meterSno.setText(invoice.getSno());
-        holder.openingEBKwh.setText(String.valueOf(invoice.getOpen_kwheb()));
-        holder.closingEBKwh.setText(String.valueOf(invoice.getClose_kwheb()));
-        holder.ebConsumption.setText(String.valueOf(invoice.getCon_kwheb()));
-        holder.openingDG.setText(String.valueOf(invoice.getOpen_kwhdg()));
-        holder.closingDG.setText(String.valueOf(invoice.getClose_kwhdg()));
-        holder.dgConsumption.setText(String.valueOf(invoice.getCon_kwhdg()));
-        holder.ebTariff.setText(String.valueOf(invoice.getEbt()));
-        holder.dgTariff.setText(String.valueOf(invoice.getDgt()));
-        holder.activeDays.setText(String.valueOf(invoice.getActday()));
-        holder.netAmount.setText(String.format("%.2f", invoice.getNetamount()));
-    }
-
     @Override
     public int getItemCount() {
-        return invoiceList.size();
+        return invoiceList.size() + 1; // +1 for header
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return (position == 0) ? TYPE_HEADER : TYPE_ITEM;
+    }
+
+    @NonNull
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if (viewType == TYPE_HEADER) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_create_header, parent, false);
+            return new HeaderViewHolder(view);
+        } else {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_create, parent, false);
+            return new InvoiceViewHolder(view);
+        }
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof InvoiceViewHolder) {
+            InvoiceResponse invoice = invoiceList.get(position - 1); // -1 because of header
+            InvoiceViewHolder vh = (InvoiceViewHolder) holder;
+
+            vh.meterSno.setText(invoice.getSno());
+            vh.openingEBKwh.setText(String.valueOf(invoice.getOpen_kwheb()));
+            vh.closingEBKwh.setText(String.valueOf(invoice.getClose_kwheb()));
+            vh.ebConsumption.setText(String.valueOf(invoice.getCon_kwheb()));
+            vh.openingDG.setText(String.valueOf(invoice.getOpen_kwhdg()));
+            vh.closingDG.setText(String.valueOf(invoice.getClose_kwhdg()));
+            vh.dgConsumption.setText(String.valueOf(invoice.getCon_kwhdg()));
+            vh.ebTariff.setText(String.valueOf(invoice.getEbt()));
+            vh.dailyCharge.setText(String.valueOf(invoice.getDaily_charge()));
+            vh.dgTariff.setText(String.valueOf(invoice.getDgt()));
+            vh.activeDays.setText(String.valueOf(invoice.getActday()));
+            vh.netAmount.setText(String.format("%.2f", invoice.getNetamount()));
+        }
     }
 
     static class InvoiceViewHolder extends RecyclerView.ViewHolder {
@@ -501,6 +518,15 @@ public class CreateAdapter extends RecyclerView.Adapter<CreateAdapter.InvoiceVie
             dailyCharge = itemView.findViewById(R.id.text_daily_charge);
             activeDays = itemView.findViewById(R.id.text_active_days);
             netAmount = itemView.findViewById(R.id.text_net_amount);
+
+
+        }
+    }
+
+    static class HeaderViewHolder extends RecyclerView.ViewHolder {
+        public HeaderViewHolder(@NonNull View itemView) {
+            super(itemView);
+            // Nothing to bind since text is static in XML
         }
     }
 }

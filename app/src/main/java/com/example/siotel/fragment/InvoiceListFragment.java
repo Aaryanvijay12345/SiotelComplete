@@ -110,10 +110,13 @@ public class InvoiceListFragment extends Fragment {
                 if (response.isSuccessful() && response.body() != null) {
                     List<Invoice> invoices = response.body();
                     if (!invoices.isEmpty()) {
-                        invoiceAdapter = new InvoiceAdapter(invoices,
+                        invoiceAdapter = new InvoiceAdapter(
+                                requireContext(),
+                                invoices,
                                 invoice -> fetchInvoiceDetails(invoice.getId()),
                                 invoice -> Toast.makeText(getActivity(), "Downloading Invoice #" + invoice.getId(), Toast.LENGTH_SHORT).show()
                         );
+
 
 
                         recyclerView.setAdapter(invoiceAdapter);

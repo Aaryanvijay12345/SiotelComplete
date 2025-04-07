@@ -33,6 +33,8 @@
     import com.example.siotel.adapters.ReportAdapter;
     import com.example.siotel.api.PostRequestApi;
     import com.example.siotel.models.HouseholdsModel;
+    import com.example.siotel.models.InvoiceCreationRequest;
+    import com.example.siotel.models.InvoiceCreationResponse;
     import com.example.siotel.models.InvoiceRequest;
     import com.example.siotel.models.InvoiceResponse;
     import com.example.siotel.models.ReportRequest;
@@ -499,8 +501,6 @@
                         CreateAdapter adapter = new CreateAdapter(invoiceList);
                         recyclerViewInvoice.setAdapter(adapter);
 
-                        // Optional: Notify user of success
-                        Toast.makeText(getContext(), "Invoice created and displayed successfully", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(getContext(), "Failed to create invoice", Toast.LENGTH_SHORT).show();
                         Log.e("CreateFragment", "Error Response: " + response.errorBody());
@@ -516,7 +516,146 @@
         }
 
         private void createInvoice() {
-            Toast.makeText(getContext(), "Invoice Created Successfully", Toast.LENGTH_SHORT).show();
+            // Get meter serial number from AutoCompleteTextView
+            String meterSNO = autoCompleteMeterSNO.getText().toString().trim();
+            if (meterSNO.isEmpty()) {
+                Toast.makeText(getContext(), "Please select a meter SNO", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Extract the second part if meterSNO contains "||"
+            if (meterSNO.contains("||")) {
+                String[] parts = meterSNO.split("\\|\\|");
+                if (parts.length > 1) {
+                    meterSNO = parts[1].trim();
+                }
+            }
+
+            // Get start and end dates from EditText fields
+            String startDateStr = startDate.getText().toString().trim();
+            String endDateStr = endDate.getText().toString().trim();
+            if (startDateStr.isEmpty() || endDateStr.isEmpty()) {
+                Toast.makeText(getContext(), "Please enter start and end dates", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Convert dates to "yyyy-MM-dd" format
+            String formattedStartDate = convertDateFormat(startDateStr);
+            String formattedEndDate = convertDateFormat(endDateStr);
+            if (formattedStartDate == null || formattedEndDate == null) {
+                Toast.makeText(getContext(), "Invalid date format", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Ensure a report has been generated to fetch meter readings and other data
+            if (currentReport == null) {
+                Toast.makeText(getContext(), "Please generate the report first", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Get the user's email from the Token object stored in SharedPrefManager
+            Token token = sharedPrefManager.getUser();
+            String email = token.getEmail();
+            if (email == null || email.isEmpty()) {
+                Toast.makeText(getContext(), "Email not found. Please log in again.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Get the site name from the Spinner
+            String sitename = spinnerSite.getSelectedItem().toString();
+            if (sitename == null || sitename.isEmpty()) {
+                Toast.makeText(getContext(), "Please select a site", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Static values as per the example JSON (adjust as needed in a real application)
+            String hname = "flat_1007";
+            String uname = "flat_1007";
+            String cemail = "demo1007@gmail.com";
+            String caddress = "Grand Anukampa Sodala,Jaipur";
+            double mc = 20.0;
+
+            // Calculate current date and invoice due date
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            String currentDate = sdf.format(new Date());
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.DAY_OF_MONTH, 15); // Due date is 15 days from current date
+            String invoiceDue = sdf.format(calendar.getTime());
+
+            // Create the InvoiceCreationRequest object and populate it
+            InvoiceCreationRequest request = new InvoiceCreationRequest();
+            request.setEmail(email);
+            request.setMeterSno(meterSNO);
+            request.setStartdate(formattedStartDate);
+            request.setEnddate(formattedEndDate);
+            request.setHname(hname);
+            request.setUname(uname);
+            request.setCemail(cemail);
+            request.setCaddress(caddress);
+            request.setOpen_kwheb(currentReport.getEb_kwh_open());
+            request.setClose_kwheb(currentReport.getEb_kwh_close());
+            request.setCon_kwheb(currentReport.getCon_eb_kwh());
+            request.setOpen_kwhdg(currentReport.getDg_kwh_open());
+            request.setClose_kwhdg(currentReport.getDg_kwh_close());
+            request.setCon_kwhdg(currentReport.getCon_dg_kwh());
+            request.setEbt(currentReport.getEb_tf());
+            request.setDgt(currentReport.getDg_tf());
+            request.setMc(mc);
+            request.setOpen_amount(currentReport.getAmount_open());
+            request.setClose_amount(currentReport.getAmount_close());
+            request.setActday(currentReport.getActivate_days());
+            request.setNetamount(currentReport.getNet_amount());
+            request.setSitename(sitename);
+            request.setCurrent_date(currentDate);
+            request.setInvoice_due(invoiceDue);
+
+            // Get the access token for authentication
+            String accessToken = sharedPrefManager.getAccessToken();
+            if (accessToken == null) {
+                Toast.makeText(getContext(), "Token not found. Please log in again.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            String tokenStr = "Bearer " + accessToken;
+
+            // Set up Retrofit
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl("http://meters.siotel.in/")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            // Create the API interface
+            PostRequestApi requestApi = retrofit.create(PostRequestApi.class);
+            Call<String> call = requestApi.createInvoiceApi(tokenStr, request);
+
+            // Execute the API call asynchronously
+            call.enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        // Display the string response (e.g., "Invoice Created Successfully")
+                        String message = response.body();
+                        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+                    } else {
+                        // Handle error response
+                        String errorMessage = "Unknown error";
+                        if (response.errorBody() != null) {
+                            try {
+                                errorMessage = response.errorBody().string();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        Toast.makeText(getContext(), "Failed to create invoice: " + errorMessage, Toast.LENGTH_SHORT).show();
+                        Log.e("CreateFragment", "Error Response: " + errorMessage);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    Toast.makeText(getContext(), "Error creating invoice. Check internet connection.", Toast.LENGTH_SHORT).show();
+                    Log.e("CreateFragment", "Error: " + t.getMessage());
+                }
+            });
         }
     }
 

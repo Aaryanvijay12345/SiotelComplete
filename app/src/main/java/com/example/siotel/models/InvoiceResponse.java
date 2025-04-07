@@ -25,6 +25,8 @@ public class InvoiceResponse {
     private String current_date;
     private String invoice_due;
 
+    private double daily_charge;
+
     // Getters and setters
     public String getSno() { return sno; }
     public void setSno(String sno) { this.sno = sno; }
@@ -74,4 +76,8 @@ public class InvoiceResponse {
     public void setCurrent_date(String current_date) { this.current_date = current_date; }
     public String getInvoice_due() { return invoice_due; }
     public void setInvoice_due(String invoice_due) { this.invoice_due = invoice_due; }
+
+    public double getDaily_charge() {
+        return daily_charge;
+    }
 }

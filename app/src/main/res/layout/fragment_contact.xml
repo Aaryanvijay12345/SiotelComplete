@@ -83,6 +83,57 @@
         android:layout_below="@id/message"
         android:layout_marginTop="15dp"/>
 
+    <TextView
+        android:id="@+id/querry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="If You Have Any Querry"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:layout_below="@+id/sendButton"
+        android:textColor="@android:color/white"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        />
+
+    <TextView
+        android:id="@+id/contact"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Contact Us On"
+        android:textSize="20sp"
+        android:layout_below="@+id/querry"
+        android:textColor="@android:color/white"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        />
+
+    <TextView
+        android:id="@+id/email1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="📧 Email: marketing@sstpl.net.in"
+        android:textSize="16sp"
+        android:layout_below="@+id/contact"
+        android:textColor="@android:color/white"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp"
+        />
+
+    <TextView
+        android:id="@+id/mobile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Contact No.: 8890100333"
+        android:textSize="16sp"
+        android:layout_below="@+id/email1"
+        android:textColor="@android:color/white"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="20dp"
+        />
+
 
 
 
