@@ -152,29 +152,77 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
     private void generateInvoicePdf(Invoice invoice) {
         PdfDocument pdfDocument = new PdfDocument();
         Paint paint = new Paint();
+        Paint titlePaint = new Paint();
+        Paint linePaint = new Paint();
 
         PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(300, 600, 1).create();
         PdfDocument.Page page = pdfDocument.startPage(pageInfo);
-
         Canvas canvas = page.getCanvas();
+
+        int y = 30;
+
+        // Title
+        titlePaint.setTextSize(18f);
+        titlePaint.setFakeBoldText(true);
+        titlePaint.setColor(Color.BLACK);
+        canvas.drawText("INVOICE", 100, y, titlePaint);
+        y += 25;
+
+        // Divider line
+        linePaint.setStrokeWidth(1);
+        canvas.drawLine(10, y, 290, y, linePaint);
+        y += 15;
+
+        // Sub-Headers
         paint.setTextSize(12f);
         paint.setColor(Color.BLACK);
+        paint.setFakeBoldText(true);
+        canvas.drawText("Invoice Details:", 10, y, paint);
+        y += 20;
 
-        int y = 25;
-        canvas.drawText("Invoice ID: #" + invoice.getId(), 10, y, paint); y += 20;
-        canvas.drawText("Customer: " + invoice.getCustomer(), 10, y, paint); y += 20;
-        canvas.drawText("Billing Address: " + invoice.getBillingAddress(), 10, y, paint); y += 20;
-        canvas.drawText("Invoice Date: " + invoice.getDate(), 10, y, paint); y += 20;
-        canvas.drawText("Due Date: " + invoice.getDueDate(), 10, y, paint); y += 20;
-        canvas.drawText("Total Amount: ₹" + String.format("%.2f", invoice.getTotalAmount()), 10, y, paint); y += 20;
-        canvas.drawText("Status: " + (invoice.isStatus() ? "Paid" : "Unpaid"), 10, y, paint); y += 20;
+        // Invoice Information
+        paint.setFakeBoldText(false);
+        canvas.drawText("Invoice ID:", 10, y, paint);
+        canvas.drawText("#" + invoice.getId(), 150, y, paint);
+        y += 18;
+
+        canvas.drawText("Customer:", 10, y, paint);
+        canvas.drawText(invoice.getCustomer(), 150, y, paint);
+        y += 18;
+
+        canvas.drawText("Billing Address:", 10, y, paint);
+        canvas.drawText(invoice.getBillingAddress(), 150, y, paint);
+        y += 18;
+
+        canvas.drawText("Invoice Date:", 10, y, paint);
+        canvas.drawText(invoice.getDate(), 150, y, paint);
+        y += 18;
+
+        canvas.drawText("Due Date:", 10, y, paint);
+        canvas.drawText(invoice.getDueDate(), 150, y, paint);
+        y += 18;
+
+        canvas.drawText("Total Amount:", 10, y, paint);
+        canvas.drawText("₹" + String.format("%.2f", invoice.getTotalAmount()), 150, y, paint);
+        y += 18;
+
+        canvas.drawText("Status:", 10, y, paint);
+        canvas.drawText(invoice.isStatus() ? "Paid" : "Unpaid", 150, y, paint);
+        y += 25;
+
+        // Footer line
+        canvas.drawLine(10, y, 290, y, linePaint);
+        y += 20;
+
+        paint.setTextAlign(Paint.Align.CENTER);
+        paint.setTextSize(10f);
+        canvas.drawText("Thank you for your business!", pageInfo.getPageWidth() / 2, y, paint);
 
         pdfDocument.finishPage(page);
 
         // Save to file
         String fileName = "Invoice_" + invoice.getId() + ".pdf";
         File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName);
-
 
         try {
             pdfDocument.writeTo(new FileOutputStream(file));
@@ -186,6 +234,7 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
 
         pdfDocument.close();
     }
+
 
 }
 

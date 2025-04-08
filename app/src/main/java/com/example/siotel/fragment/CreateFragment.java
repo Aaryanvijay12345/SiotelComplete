@@ -41,6 +41,7 @@
     import com.example.siotel.models.ReportResponse;
     import com.example.siotel.models.SaveEmail;
     import com.example.siotel.models.Token;
+    import com.example.siotel.models.UsageEntry;
     import com.google.gson.Gson;
 
     import java.io.File;
@@ -79,6 +80,9 @@
 
 
         private CreateAdapter createAdapter;
+
+        private InvoiceResponse latestInvoiceResponse;
+
 
         @Nullable
         @Override
@@ -224,57 +228,122 @@
         }
 
         private void exportToPDF() {
-            // Check if there's a report to export
             if (currentReport == null) {
                 Toast.makeText(getContext(), "Please generate the report first", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // Create a new PDF document
             PdfDocument document = new PdfDocument();
-            PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(595, 842, 1).create(); // A4 size in points
+            PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(595, 842, 1).create(); // A4 size
             PdfDocument.Page page = document.startPage(pageInfo);
             Canvas canvas = page.getCanvas();
 
-            // Set up paint for drawing text
-            Paint paint = new Paint();
-            paint.setColor(Color.BLACK);
-            paint.setTextSize(12);
+            Paint titlePaint = new Paint();
+            titlePaint.setColor(Color.BLACK);
+            titlePaint.setTextSize(18);
+            titlePaint.setFakeBoldText(true);
 
-            // Draw title
-            canvas.drawText("Usage Report", 10, 10, paint);
+            Paint sectionHeaderPaint = new Paint();
+            sectionHeaderPaint.setColor(Color.DKGRAY);
+            sectionHeaderPaint.setTextSize(14);
+            sectionHeaderPaint.setFakeBoldText(true);
 
-            // Draw table headers
-            canvas.drawText("Date", 10, 30, paint);
-            canvas.drawText("Usage", 100, 30, paint);
+            Paint textPaint = new Paint();
+            textPaint.setColor(Color.BLACK);
+            textPaint.setTextSize(12);
 
-            // Since ReportResponse structure is unknown, assume it has a method to get a list of entries
-            // For this example, we'll simulate with dummy data or adjust based on actual structure
-            // Replace this with actual data extraction from currentReport
-            int y = 50;
-            // Example: Assuming ReportResponse has a method getUsageEntries()
-            // List<UsageEntry> entries = currentReport.getUsageEntries();
-            // For demonstration, using dummy data since the actual structure isn't provided
-            String[] dates = {"2023-01-01", "2023-01-02", "2023-01-03"};
-            String[] usages = {"100", "150", "120"};
-            for (int i = 0; i < dates.length; i++) {
-                canvas.drawText(dates[i], 10, y, paint);
-                canvas.drawText(usages[i], 100, y, paint);
+            Paint linePaint = new Paint();
+            linePaint.setColor(Color.LTGRAY);
+            linePaint.setStrokeWidth(1);
+
+            int y = 40;
+            int leftMargin = 30;
+
+            // Title
+            canvas.drawText("📄 Usage Report", leftMargin, y, titlePaint);
+            y += 20;
+            canvas.drawLine(leftMargin, y, 565, y, linePaint);
+            y += 20;
+
+            // Meter Info Section
+            canvas.drawText("Meter Information", leftMargin, y, sectionHeaderPaint);
+            y += 20;
+            canvas.drawText("Meter SNO: " + currentReport.getSno(), leftMargin, y, textPaint);
+            y += 18;
+            canvas.drawText("Start Date: " + currentReport.getActual_start_date(), leftMargin, y, textPaint);
+            y += 18;
+            canvas.drawText("End Date: " + currentReport.getActual_end_date(), leftMargin, y, textPaint);
+            y += 20;
+            canvas.drawLine(leftMargin, y, 565, y, linePaint);
+            y += 20;
+
+            // Summary Section
+            canvas.drawText("Summary", leftMargin, y, sectionHeaderPaint);
+            y += 20;
+            canvas.drawText("EB KWH (Open): " + currentReport.getEb_kwh_open(), leftMargin, y, textPaint);
+            canvas.drawText("EB KWH (Close): " + currentReport.getEb_kwh_close(), 300, y, textPaint);
+            y += 18;
+            canvas.drawText("DG KWH (Open): " + currentReport.getDg_kwh_open(), leftMargin, y, textPaint);
+            canvas.drawText("DG KWH (Close): " + currentReport.getDg_kwh_close(), 300, y, textPaint);
+            y += 18;
+            canvas.drawText("EB Consumed: " + currentReport.getCon_eb_kwh(), leftMargin, y, textPaint);
+            canvas.drawText("DG Consumed: " + currentReport.getCon_dg_kwh(), 300, y, textPaint);
+            y += 18;
+            canvas.drawText("EB TF: " + currentReport.getEb_tf(), leftMargin, y, textPaint);
+            canvas.drawText("DG TF: " + currentReport.getDg_tf(), 300, y, textPaint);
+            y += 18;
+            canvas.drawText("DC TF: " + currentReport.getDc_tf(), leftMargin, y, textPaint);
+            canvas.drawText("Activated Days: " + currentReport.getActivate_days(), 300, y, textPaint);
+            y += 18;
+            canvas.drawText("Amount (Open): " + currentReport.getAmount_open(), leftMargin, y, textPaint);
+            canvas.drawText("Amount (Close): " + currentReport.getAmount_close(), 300, y, textPaint);
+            y += 18;
+            canvas.drawText("Net Amount: " + currentReport.getNet_amount(), leftMargin, y, textPaint);
+            canvas.drawText("Recharge: " + currentReport.getTotal_Recharge(), 300, y, textPaint);
+            y += 18;
+            canvas.drawText("CAM Amount: " + currentReport.getTotal_cam_amount(), leftMargin, y, textPaint);
+            canvas.drawText("Except CAM: " + currentReport.getTotal_except_cam_amount(), 300, y, textPaint);
+            y += 18;
+            canvas.drawText("Total Amount: " + currentReport.getTotal_amount(), leftMargin, y, textPaint);
+            y += 20;
+            canvas.drawLine(leftMargin, y, 565, y, linePaint);
+            y += 20;
+
+            // Usage Entries Section
+            List<UsageEntry> entries = currentReport.getUsageEntries();
+            if (entries != null && !entries.isEmpty()) {
+                canvas.drawText("Usage Details", leftMargin, y, sectionHeaderPaint);
                 y += 20;
-                if (y > 800) { // Handle pagination
-                    document.finishPage(page);
-                    page = document.startPage(pageInfo);
-                    canvas = page.getCanvas();
-                    y = 10;
+
+                // Table Header
+                textPaint.setFakeBoldText(true);
+                canvas.drawText("Date", leftMargin, y, textPaint);
+                canvas.drawText("Usage", 200, y, textPaint);
+                textPaint.setFakeBoldText(false);
+                y += 16;
+                canvas.drawLine(leftMargin, y, 565, y, linePaint);
+                y += 10;
+
+                // Table Data
+                for (UsageEntry entry : entries) {
+                    if (y > 800) { // Paginate
+                        document.finishPage(page);
+                        page = document.startPage(pageInfo);
+                        canvas = page.getCanvas();
+                        y = 40;
+                    }
+
+                    canvas.drawText(entry.getDate(), leftMargin, y, textPaint);
+                    canvas.drawText(entry.getUsage(), 200, y, textPaint);
+                    y += 18;
                 }
             }
 
-            // Finish the page
             document.finishPage(page);
 
-            // Save the PDF to the cache directory
             File cacheDir = requireContext().getCacheDir();
             File pdfFile = new File(cacheDir, "report.pdf");
+
             try {
                 document.writeTo(new FileOutputStream(pdfFile));
                 document.close();
@@ -284,6 +353,7 @@
                 Toast.makeText(getContext(), "Error creating PDF", Toast.LENGTH_SHORT).show();
             }
         }
+
 
         private void sharePdfFile(File pdfFile) {
             String authority = requireContext().getPackageName() + ".fileprovider";
@@ -491,6 +561,7 @@
                     if (response.isSuccessful() && response.body() != null) {
                         // Get the InvoiceResponse
                         InvoiceResponse invoiceResponse = response.body();
+                        latestInvoiceResponse = response.body();
                         Log.d("CreateFragment", "Response: " + new Gson().toJson(invoiceResponse));
 
                         // Prepare a list for the adapter (single item for now)
@@ -517,21 +588,37 @@
 
         private void createInvoice() {
             // Get meter serial number from AutoCompleteTextView
-            String meterSNO = autoCompleteMeterSNO.getText().toString().trim();
-            if (meterSNO.isEmpty()) {
+            String originalInput = autoCompleteMeterSNO.getText().toString().trim();
+            if (originalInput.isEmpty()) {
                 Toast.makeText(getContext(), "Please select a meter SNO", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // Extract the second part if meterSNO contains "||"
-            if (meterSNO.contains("||")) {
-                String[] parts = meterSNO.split("\\|\\|");
-                if (parts.length > 1) {
-                    meterSNO = parts[1].trim();
+            // Extract values
+            String meterSNO = originalInput;
+            String hname = "";
+            String uname = "";
+
+            // Use hname and uname from latestInvoiceResponse if available
+            if (latestInvoiceResponse != null && latestInvoiceResponse.getHname() != null) {
+                hname = latestInvoiceResponse.getHname();
+                uname = latestInvoiceResponse.getHname(); // Using hname for uname as well
+            } else {
+                // Fallback if response is not yet set
+                if (originalInput.contains("||")) {
+                    String[] parts = originalInput.split("\\|\\|");
+                    if (parts.length > 1) {
+                        hname = parts[0].trim();  // before ||
+                        uname = parts[0].trim();
+                        meterSNO = parts[1].trim(); // after ||
+                    }
+                } else {
+                    hname = originalInput;
+                    uname = originalInput;
                 }
             }
 
-            // Get start and end dates from EditText fields
+            // Get start and end dates
             String startDateStr = startDate.getText().toString().trim();
             String endDateStr = endDate.getText().toString().trim();
             if (startDateStr.isEmpty() || endDateStr.isEmpty()) {
@@ -539,7 +626,6 @@
                 return;
             }
 
-            // Convert dates to "yyyy-MM-dd" format
             String formattedStartDate = convertDateFormat(startDateStr);
             String formattedEndDate = convertDateFormat(endDateStr);
             if (formattedStartDate == null || formattedEndDate == null) {
@@ -547,13 +633,12 @@
                 return;
             }
 
-            // Ensure a report has been generated to fetch meter readings and other data
             if (currentReport == null) {
                 Toast.makeText(getContext(), "Please generate the report first", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // Get the user's email from the Token object stored in SharedPrefManager
+            // Get email from token
             Token token = sharedPrefManager.getUser();
             String email = token.getEmail();
             if (email == null || email.isEmpty()) {
@@ -561,28 +646,25 @@
                 return;
             }
 
-            // Get the site name from the Spinner
             String sitename = spinnerSite.getSelectedItem().toString();
             if (sitename == null || sitename.isEmpty()) {
                 Toast.makeText(getContext(), "Please select a site", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // Static values as per the example JSON (adjust as needed in a real application)
-            String hname = "flat_1007";
-            String uname = "flat_1007";
+            // Static values
             String cemail = "demo1007@gmail.com";
             String caddress = "Grand Anukampa Sodala,Jaipur";
             double mc = 20.0;
 
-            // Calculate current date and invoice due date
+            // Current and due date
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
             String currentDate = sdf.format(new Date());
             Calendar calendar = Calendar.getInstance();
-            calendar.add(Calendar.DAY_OF_MONTH, 15); // Due date is 15 days from current date
+            calendar.add(Calendar.DAY_OF_MONTH, 15);
             String invoiceDue = sdf.format(calendar.getTime());
 
-            // Create the InvoiceCreationRequest object and populate it
+            // Build invoice request
             InvoiceCreationRequest request = new InvoiceCreationRequest();
             request.setEmail(email);
             request.setMeterSno(meterSNO);
@@ -609,34 +691,29 @@
             request.setCurrent_date(currentDate);
             request.setInvoice_due(invoiceDue);
 
-            // Get the access token for authentication
+            // Retrofit API call
             String accessToken = sharedPrefManager.getAccessToken();
             if (accessToken == null) {
                 Toast.makeText(getContext(), "Token not found. Please log in again.", Toast.LENGTH_SHORT).show();
                 return;
             }
+
             String tokenStr = "Bearer " + accessToken;
 
-            // Set up Retrofit
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl("http://meters.siotel.in/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
-            // Create the API interface
             PostRequestApi requestApi = retrofit.create(PostRequestApi.class);
             Call<String> call = requestApi.createInvoiceApi(tokenStr, request);
 
-            // Execute the API call asynchronously
             call.enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
                     if (response.isSuccessful() && response.body() != null) {
-                        // Display the string response (e.g., "Invoice Created Successfully")
-                        String message = response.body();
-                        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), response.body(), Toast.LENGTH_SHORT).show();
                     } else {
-                        // Handle error response
                         String errorMessage = "Unknown error";
                         if (response.errorBody() != null) {
                             try {
@@ -657,6 +734,7 @@
                 }
             });
         }
+
     }
 
 

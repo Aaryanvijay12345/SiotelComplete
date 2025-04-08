@@ -54,6 +54,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
@@ -347,79 +348,114 @@ public class ConsumerMeterInformationFragment extends Fragment {
             return;
         }
 
-        // Create a new PDF document
         PdfDocument document = new PdfDocument();
-        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(595, 842, 1).create(); // A4 portrait
+        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(595, 842, 1).create(); // A4 size
         PdfDocument.Page page = document.startPage(pageInfo);
         Canvas canvas = page.getCanvas();
 
-        // Define Paint objects for styling
+        // Paints
+        Paint titlePaint = new Paint();
+        titlePaint.setColor(Color.BLACK);
+        titlePaint.setTextSize(16);
+        titlePaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+        titlePaint.setTextAlign(Paint.Align.CENTER);
+
+        Paint datePaint = new Paint();
+        datePaint.setColor(Color.DKGRAY);
+        datePaint.setTextSize(10);
+        datePaint.setTextAlign(Paint.Align.CENTER);
+
         Paint borderPaint = new Paint();
         borderPaint.setStyle(Paint.Style.STROKE);
         borderPaint.setColor(Color.BLACK);
         borderPaint.setStrokeWidth(1);
 
-        Paint headerFillPaint = new Paint();
-        headerFillPaint.setStyle(Paint.Style.FILL);
-        headerFillPaint.setColor(Color.LTGRAY);
-
         Paint headerPaint = new Paint();
-        headerPaint.setColor(Color.BLACK);
-        headerPaint.setTextSize(7);
+        headerPaint.setColor(Color.WHITE);
+        headerPaint.setTextSize(10);
         headerPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+        headerPaint.setTextAlign(Paint.Align.CENTER);
 
         Paint textPaint = new Paint();
         textPaint.setColor(Color.BLACK);
-        textPaint.setTextSize(7);
+        textPaint.setTextSize(9);
+        textPaint.setTextAlign(Paint.Align.CENTER);
 
-        // Define headers for the table
+        Paint headerFillPaint = new Paint();
+        headerFillPaint.setStyle(Paint.Style.FILL);
+        headerFillPaint.setColor(Color.rgb(63, 81, 181)); // Indigo
+
+        Paint rowAltPaint = new Paint();
+        rowAltPaint.setStyle(Paint.Style.FILL);
+        rowAltPaint.setColor(Color.rgb(240, 240, 240)); // light gray
+
         String[] headers = {"MeterSno", "Amount", "Cum_eb_kwh", "Date"};
+        float startX = 40;
+        float startY = 80;
+        float colWidth = 130;
+        int numCols = headers.length;
+        float rowHeight = 30;
 
-        // Define table position and dimensions
-        float startX = 20;
-        float startY = 20;
-        float colWidth = 100;
-        int numCols = 4;
-        float rowHeight = 20;
-
-        // Calculate the number of rows that can fit on one page (including header)
         float pageHeight = pageInfo.getPageHeight();
-        float usableHeight = pageHeight - startY * 2; // Account for top and bottom margins
-        int rowsPerPage = (int) (usableHeight / rowHeight) - 1; // -1 for header row
+        float usableHeight = pageHeight - startY - 100;
+        int rowsPerPage = (int) (usableHeight / rowHeight) - 1;
 
         int numDataRows = reportList.size();
         int currentRow = 0;
         int pageNumber = 1;
 
         while (currentRow < numDataRows) {
-            // Start a new page if necessary
             if (currentRow > 0) {
                 document.finishPage(page);
-                pageInfo = new PdfDocument.PageInfo.Builder(595, 842, pageNumber + 1).create();
+                pageInfo = new PdfDocument.PageInfo.Builder(595, 842, ++pageNumber).create();
                 page = document.startPage(pageInfo);
                 canvas = page.getCanvas();
-                startY = 20; // Reset startY for new page
             }
 
-            // Draw header background
+            // Title
+            canvas.drawText("Consumer Meter Report", pageInfo.getPageWidth() / 2, 30, titlePaint);
+
+            // Date/Time
+            String timestamp = new SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault()).format(new Date());
+            canvas.drawText("Generated on: " + timestamp, pageInfo.getPageWidth() / 2, 50, datePaint);
+
+            // Header background
             canvas.drawRect(startX, startY, startX + numCols * colWidth, startY + rowHeight, headerFillPaint);
 
-            // Draw header text
+            // Header text
             for (int i = 0; i < numCols; i++) {
-                float x = startX + i * colWidth + 2;
-                float y = startY + 15;
-                canvas.drawText(headers[i], x, y, headerPaint);
+                float x = startX + i * colWidth + colWidth / 2;
+                canvas.drawText(headers[i], x, startY + 20, headerPaint);
             }
 
-            // Calculate how many rows to draw on this page
             int rowsToDraw = Math.min(rowsPerPage, numDataRows - currentRow);
-            if (currentRow == 0 && rowsToDraw < numDataRows) {
-                rowsToDraw--; // Exclude the last row on the first page to repeat it on the next
-            }
+            float tableHeight = (rowsToDraw + 1) * rowHeight;
 
-            // Draw outer border for the table on this page
-            float tableHeight = (rowsToDraw + 1) * rowHeight; // +1 for header
             canvas.drawRect(startX, startY, startX + numCols * colWidth, startY + tableHeight, borderPaint);
+
+            for (int row = 0; row < rowsToDraw; row++) {
+                float topY = startY + (row + 1) * rowHeight;
+                if (row % 2 == 0) {
+                    canvas.drawRect(startX, topY, startX + numCols * colWidth, topY + rowHeight, rowAltPaint);
+                }
+
+                ConsumerMeterInformationModel report = reportList.get(currentRow + row);
+                String[] data = {
+                        report.getMeterSN() != null ? report.getMeterSN() : "N/A",
+                        String.valueOf(report.getBalance_amount()),
+                        String.valueOf(report.getCum_eb_kwh()),
+                        report.getDate() != null ? report.getDate() : "N/A"
+                };
+
+                for (int col = 0; col < numCols; col++) {
+                    float x = startX + col * colWidth + colWidth / 2;
+                    float y = topY + 20;
+                    canvas.drawText(data[col], x, y, textPaint);
+                }
+
+                // Draw horizontal line after row
+                canvas.drawLine(startX, topY + rowHeight, startX + numCols * colWidth, topY + rowHeight, borderPaint);
+            }
 
             // Draw vertical lines
             for (int i = 1; i < numCols; i++) {
@@ -427,41 +463,18 @@ public class ConsumerMeterInformationFragment extends Fragment {
                 canvas.drawLine(x, startY, x, startY + tableHeight, borderPaint);
             }
 
-            // Draw internal horizontal lines
-            for (int i = 1; i <= rowsToDraw; i++) {
-                float y = startY + i * rowHeight;
-                canvas.drawLine(startX, y, startX + numCols * colWidth, y, borderPaint);
-            }
+            // Footer with page number
+            Paint footerPaint = new Paint();
+            footerPaint.setColor(Color.DKGRAY);
+            footerPaint.setTextSize(9);
+            footerPaint.setTextAlign(Paint.Align.RIGHT);
+            canvas.drawText("Page " + pageNumber, pageInfo.getPageWidth() - 40, pageInfo.getPageHeight() - 20, footerPaint);
 
-            // Draw data rows
-            for (int row = 0; row < rowsToDraw; row++) {
-                ConsumerMeterInformationModel report = reportList.get(currentRow + row);
-                String[] data = new String[4];
-                data[0] = report.getMeterSN() != null ? report.getMeterSN() : "N/A";
-                data[1] = String.valueOf(report.getBalance_amount());
-                data[2] = String.valueOf(report.getCum_eb_kwh());
-                data[3] = report.getDate() != null ? report.getDate() : "N/A";
-
-                for (int col = 0; col < numCols; col++) {
-                    float x = startX + col * colWidth + 2;
-                    float y = startY + (row + 1) * rowHeight + 15; // +1 to offset for header
-                    canvas.drawText(data[col], x, y, textPaint);
-                }
-            }
-
-            // Move to the next set of rows, ensuring the last row is repeated on the next page
-            if (currentRow == 0 && rowsToDraw < numDataRows) {
-                currentRow += rowsToDraw; // First page: skip to the last row to repeat it
-            } else {
-                currentRow += rowsToDraw + 1; // Subsequent pages: include the repeated row
-            }
-            pageNumber++;
+            currentRow += rowsToDraw;
         }
 
-        // Finalize the last page
         document.finishPage(page);
 
-        // Save and share the PDF
         File cacheDir = requireContext().getCacheDir();
         File pdfFile = new File(cacheDir, "report.pdf");
         try {

@@ -440,187 +440,134 @@ public class ReportFragment extends Fragment {
             return;
         }
 
-        // Create a new PDF document in landscape orientation
         PdfDocument document = new PdfDocument();
-        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(595, 842, 1).create(); // A4 landscape
+        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(595, 842, 1).create();
         PdfDocument.Page page = document.startPage(pageInfo);
         Canvas canvas = page.getCanvas();
 
-        // Define Paint objects for styling
+        // Common styling
         Paint borderPaint = new Paint();
         borderPaint.setStyle(Paint.Style.STROKE);
-        borderPaint.setColor(Color.BLACK);
-        borderPaint.setStrokeWidth(1);
+        borderPaint.setColor(Color.DKGRAY);
+        borderPaint.setStrokeWidth(1.5f);
 
-        Paint headerFillPaint = new Paint();
-        headerFillPaint.setStyle(Paint.Style.FILL);
-        headerFillPaint.setColor(Color.LTGRAY);
+        Paint fillPaint = new Paint();
+        fillPaint.setStyle(Paint.Style.FILL);
+        fillPaint.setColor(Color.parseColor("#f1f1f1"));
 
-        Paint headerTextPaint = new Paint();
-        headerTextPaint.setColor(Color.BLACK);
-        headerTextPaint.setTextSize(12); // Larger font for "Meter Sno" header
-        headerTextPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-
-        Paint villaTextPaint = new Paint();
-        villaTextPaint.setColor(Color.BLACK);
-        villaTextPaint.setTextSize(10); // Slightly smaller font for villa number
-        villaTextPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+        Paint titlePaint = new Paint();
+        titlePaint.setColor(Color.BLACK);
+        titlePaint.setTextSize(18);
+        titlePaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
 
         Paint headerPaint = new Paint();
         headerPaint.setColor(Color.BLACK);
-        headerPaint.setTextSize(7); // Small bold font for table headers
+        headerPaint.setTextSize(9);
         headerPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
 
         Paint textPaint = new Paint();
         textPaint.setColor(Color.BLACK);
-        textPaint.setTextSize(7); // Small font for meter serial number and table data
+        textPaint.setTextSize(8);
 
-        // Define dimensions for "Meter SNo" section
-        float meterSnoStartX = 20;
-        float meterSnoStartY = 20;
-        float meterSnoWidth = 200;
-        float meterSnoHeight = 40;
+        float startX = 30;
+        float currentY = 40;
 
-        // Draw background for "Meter SNo" section
-        canvas.drawRect(meterSnoStartX, meterSnoStartY, meterSnoStartX + meterSnoWidth, meterSnoStartY + meterSnoHeight, headerFillPaint);
+        // Title
+        String title = "Monthly Electricity Usage Report";
+        float titleX = (pageInfo.getPageWidth() - titlePaint.measureText(title)) / 2;
+        canvas.drawText(title, titleX, currentY, titlePaint);
 
-        // Draw borders for "Meter SNo" section
-        canvas.drawRect(meterSnoStartX, meterSnoStartY, meterSnoStartX + meterSnoWidth, meterSnoStartY + meterSnoHeight, borderPaint);
+        currentY += 30;
 
-        // Draw "Meter Sno" header
-        String headerText = "Meter Sno";
-        float headerX = meterSnoStartX + (meterSnoWidth - headerTextPaint.measureText(headerText)) / 2;
-        float headerY = meterSnoStartY + 15;
-        canvas.drawText(headerText, headerX, headerY, headerTextPaint);
+        // Meter SNo section
+        float meterBoxWidth = 535;
+        float meterBoxHeight = 40;
 
-        // Draw meter serial number
+        canvas.drawRect(startX, currentY, startX + meterBoxWidth, currentY + meterBoxHeight, fillPaint);
+        canvas.drawRect(startX, currentY, startX + meterBoxWidth, currentY + meterBoxHeight, borderPaint);
+
+        Paint labelPaint = new Paint(headerPaint);
+        labelPaint.setTextSize(10);
+
+        String meterLabel = "Meter Serial Number:";
+        canvas.drawText(meterLabel, startX + 10, currentY + 25, labelPaint);
+
         String meterSno = currentReport.getSno() != null ? currentReport.getSno() : "N/A";
-        float snoX = meterSnoStartX + (meterSnoWidth - textPaint.measureText(meterSno)) / 2;
-        float snoY = meterSnoStartY + 38;
-        canvas.drawText(meterSno, snoX, snoY, textPaint);
+        canvas.drawText(meterSno, startX + 180, currentY + 25, textPaint);
 
-        // Define headers for both tables
+        currentY += meterBoxHeight + 20;
+
+        // Table headers
         String[] headers = {
                 "EB Open", "EB Close", "EB Cons", "DG Open", "DG Close", "DG Cons",
                 "EB Tf", "DG Tf", "Daily Chg", "Amt Open", "Amt Close", "Act Days",
                 "Net Amt", "Tot Rech", "Start", "End", "CAM Rech", "Elec Rech", "Tot Amt"
         };
 
-        // Prepare data for both tables
-        String[] data = new String[19];
-        data[0] = String.valueOf(currentReport.getEb_kwh_open());
-        data[1] = String.valueOf(currentReport.getEb_kwh_close());
-        data[2] = String.valueOf(currentReport.getCon_eb_kwh());
-        data[3] = String.valueOf(currentReport.getDg_kwh_open());
-        data[4] = String.valueOf(currentReport.getDg_kwh_close());
-        data[5] = String.valueOf(currentReport.getCon_dg_kwh());
-        data[6] = String.valueOf(currentReport.getEb_tf());
-        data[7] = String.valueOf(currentReport.getDg_tf());
-        data[8] = String.valueOf(currentReport.getDc_tf());
-        data[9] = String.valueOf(currentReport.getAmount_open());
-        data[10] = String.valueOf(currentReport.getAmount_close());
-        data[11] = String.valueOf(currentReport.getActivate_days());
-        data[12] = String.valueOf(currentReport.getNet_amount());
-        data[13] = String.valueOf(currentReport.getTotal_Recharge());
-        data[14] = currentReport.getActual_start_date() != null ? currentReport.getActual_start_date() : "N/A";
-        data[15] = currentReport.getActual_end_date() != null ? currentReport.getActual_end_date() : "N/A";
-        data[16] = String.valueOf(currentReport.getTotal_cam_amount());
-        data[17] = String.valueOf(currentReport.getTotal_except_cam_amount());
-        data[18] = String.valueOf(currentReport.getTotal_amount());
+        String[] data = {
+                String.valueOf(currentReport.getEb_kwh_open()),
+                String.valueOf(currentReport.getEb_kwh_close()),
+                String.valueOf(currentReport.getCon_eb_kwh()),
+                String.valueOf(currentReport.getDg_kwh_open()),
+                String.valueOf(currentReport.getDg_kwh_close()),
+                String.valueOf(currentReport.getCon_dg_kwh()),
+                String.valueOf(currentReport.getEb_tf()),
+                String.valueOf(currentReport.getDg_tf()),
+                String.valueOf(currentReport.getDc_tf()),
+                String.valueOf(currentReport.getAmount_open()),
+                String.valueOf(currentReport.getAmount_close()),
+                String.valueOf(currentReport.getActivate_days()),
+                String.valueOf(currentReport.getNet_amount()),
+                String.valueOf(currentReport.getTotal_Recharge()),
+                currentReport.getActual_start_date() != null ? currentReport.getActual_start_date() : "N/A",
+                currentReport.getActual_end_date() != null ? currentReport.getActual_end_date() : "N/A",
+                String.valueOf(currentReport.getTotal_cam_amount()),
+                String.valueOf(currentReport.getTotal_except_cam_amount()),
+                String.valueOf(currentReport.getTotal_amount())
+        };
 
-        // *** First Table (Columns 1-10) ***
-        float startX1 = 20;
-        float startY1 = meterSnoStartY + meterSnoHeight + 10; // 70
-        float colWidth1 = 42;
-        int numCols1 = 10;
-        float rowHeight = 20;
+        int cols = 10;
+        int rows = 2;
+        float rowHeight = 30;
 
-        // Draw header background for first table
-        canvas.drawRect(startX1, startY1, startX1 + numCols1 * colWidth1, startY1 + rowHeight, headerFillPaint);
+        for (int r = 0; r < rows; r++) {
+            float rowStartY = currentY + r * (2 * rowHeight + 10);
+            float currentX = startX;
 
-        // Draw table grid for first table
-        canvas.drawRect(startX1, startY1, startX1 + numCols1 * colWidth1, startY1 + 2 * rowHeight, borderPaint);
+            canvas.drawRect(startX, rowStartY, startX + 535, rowStartY + rowHeight, fillPaint);
 
-        // Draw vertical lines for first table
-        for (int i = 1; i < numCols1; i++) {
-            float x = startX1 + i * colWidth1;
-            canvas.drawLine(x, startY1, x, startY1 + 2 * rowHeight, borderPaint);
-        }
+            for (int c = 0; c < cols; c++) {
+                int index = r * cols + c;
+                if (index >= headers.length) break;
 
-        // Draw horizontal line for first table
-        canvas.drawLine(startX1, startY1 + rowHeight, startX1 + numCols1 * colWidth1, startY1 + rowHeight, borderPaint);
+                // Set width dynamically for "Start" and "End"
+                float colWidth = (index == 14 || index == 15) ? 80f : 52f;
 
-        // Draw header text for first table
-        for (int i = 0; i < numCols1; i++) {
-            float x = startX1 + i * colWidth1 + 2;
-            float y = startY1 + 15;
-            canvas.drawText(headers[i], x, y, headerPaint);
-        }
+                // Border
+                canvas.drawRect(currentX, rowStartY, currentX + colWidth, rowStartY + 2 * rowHeight, borderPaint);
 
-        // Draw data text for first table
-        for (int i = 0; i < numCols1; i++) {
-            float x = startX1 + i * colWidth1 + 2;
-            float y = startY1 + rowHeight + 15;
-            canvas.drawText(data[i], x, y, textPaint);
-        }
+                // Header text
+                canvas.drawText(headers[index], currentX + 5, rowStartY + 20, headerPaint);
 
-        // *** Second Table (Columns 11-19) ***
-        float startX2 = 20;
-        float startY2 = startY1 + 2 * rowHeight + 10; // 120
+                // Data text
+                canvas.drawText(data[index], currentX + 5, rowStartY + rowHeight + 20, textPaint);
 
-        // Define column widths for second table (increase width for columns 15 and 16)
-        float[] colWidths2 = new float[9];
-        for (int i = 0; i < 9; i++) {
-            if (i == 4 || i == 5) { // Columns 15 and 16 (0-based indices 4 and 5 in second table)
-                colWidths2[i] = 80;
-            } else {
-                colWidths2[i] = 42;
+                currentX += colWidth;
             }
         }
 
-        // Compute x positions for second table
-        float[] xPositions2 = new float[9];
-        xPositions2[0] = startX2;
-        for (int i = 1; i < 9; i++) {
-            xPositions2[i] = xPositions2[i - 1] + colWidths2[i - 1];
-        }
+        // Footer - optional note
+        currentY += rows * (2 * rowHeight + 10);
+        currentY += 30;
+        Paint footerPaint = new Paint();
+        footerPaint.setColor(Color.GRAY);
+        footerPaint.setTextSize(8);
+        String footerNote = "Made With ❤️ from SSTPL";
+        canvas.drawText(footerNote, startX, currentY, footerPaint);
 
-        // Compute total width for second table
-        float totalWidth2 = xPositions2[8] + colWidths2[8] - startX2;
-
-        // Draw header background for second table
-        canvas.drawRect(startX2, startY2, startX2 + totalWidth2, startY2 + rowHeight, headerFillPaint);
-
-        // Draw table grid for second table
-        canvas.drawRect(startX2, startY2, startX2 + totalWidth2, startY2 + 2 * rowHeight, borderPaint);
-
-        // Draw vertical lines for second table
-        for (int i = 1; i < 9; i++) {
-            float x = xPositions2[i];
-            canvas.drawLine(x, startY2, x, startY2 + 2 * rowHeight, borderPaint);
-        }
-
-        // Draw horizontal line for second table
-        canvas.drawLine(startX2, startY2 + rowHeight, startX2 + totalWidth2, startY2 + rowHeight, borderPaint);
-
-        // Draw header text for second table
-        for (int i = 0; i < 9; i++) {
-            float x = xPositions2[i] + 2;
-            float y = startY2 + 15;
-            canvas.drawText(headers[10 + i], x, y, headerPaint);
-        }
-
-        // Draw data text for second table
-        for (int i = 0; i < 9; i++) {
-            float x = xPositions2[i] + 2;
-            float y = startY2 + rowHeight + 15;
-            canvas.drawText(data[10 + i], x, y, textPaint);
-        }
-
-        // Finalize the PDF
         document.finishPage(page);
-        File cacheDir = requireContext().getCacheDir();
-        File pdfFile = new File(cacheDir, "report.pdf");
+
+        File pdfFile = new File(requireContext().getCacheDir(), "report.pdf");
         try {
             document.writeTo(new FileOutputStream(pdfFile));
             document.close();
@@ -630,6 +577,7 @@ public class ReportFragment extends Fragment {
             Toast.makeText(getContext(), "Error creating PDF", Toast.LENGTH_SHORT).show();
         }
     }
+
     private void sharePdfFile(File pdfFile) {
         String authority = requireContext().getPackageName() + ".fileprovider";
         Uri uri = FileProvider.getUriForFile(requireContext(), authority, pdfFile);

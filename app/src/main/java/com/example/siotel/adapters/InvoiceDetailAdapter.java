@@ -47,27 +47,28 @@ public class InvoiceDetailAdapter extends RecyclerView.Adapter<RecyclerView.View
             InvoiceDetail detail = invoiceDetailList.get(position - 1); // Offset by 1 for header
 
             InvoiceDetailViewHolder itemHolder = (InvoiceDetailViewHolder) holder;
-            itemHolder.idTextView.setText("ID: " + detail.getId());
-            itemHolder.customerTextView.setText("Customer: " + detail.getCustomer());
-            itemHolder.customerEmailTextView.setText("Email: " + detail.getCustomerEmail());
-            itemHolder.billingAddressTextView.setText("Billing Address: " + detail.getBillingAddress());
-            itemHolder.dateTextView.setText("Date: " + detail.getDate());
-            itemHolder.dueDateTextView.setText("Due Date: " + detail.getDueDate());
-            itemHolder.messageTextView.setText("Message: " + detail.getMessage());
-            itemHolder.statusTextView.setText("Status: " + (detail.isStatus() ? "Paid" : "Pending"));
-            itemHolder.adminEmailTextView.setText("Admin Email: " + detail.getAdminEmail());
-            itemHolder.snoTextView.setText("SNO: " + detail.getSno());
-            itemHolder.openKwhebTextView.setText("Open kWheb: " + detail.getOpenKwheb());
-            itemHolder.closeKwhebTextView.setText("Close kWheb: " + detail.getCloseKwheb());
-            itemHolder.conKwhebTextView.setText("Consumption kWheb: " + detail.getConKwheb());
-            itemHolder.dgtTextView.setText("DGT: " + detail.getDgt());
-            itemHolder.mcTextView.setText("MC: " + detail.getMc());
-            itemHolder.actdayTextView.setText("Active Days: " + detail.getActday());
-            itemHolder.totalAmountTextView.setText("Total Amount: ₹" + detail.getTotalAmount());
-            itemHolder.ebtTextView.setText("EBT: " + detail.getEbt());
-            itemHolder.sitenameTextView.setText("Site Name: " + detail.getSitename());
-            itemHolder.startDateTextView.setText("Start Date: " + detail.getStartdate());
-            itemHolder.endDateTextView.setText("End Date: " + detail.getEnddate());
+            itemHolder.idTextView.setText(String.valueOf(detail.getId()));
+            itemHolder.customerTextView.setText(detail.getCustomer() != null ? detail.getCustomer() : "");
+            itemHolder.customerEmailTextView.setText(detail.getCustomerEmail() != null ? detail.getCustomerEmail() : "");
+            itemHolder.billingAddressTextView.setText(detail.getBillingAddress() != null ? detail.getBillingAddress() : "");
+            itemHolder.dateTextView.setText(detail.getDate() != null ? detail.getDate() : "");
+            itemHolder.dueDateTextView.setText(detail.getDueDate() != null ? detail.getDueDate() : "");
+            itemHolder.messageTextView.setText(detail.getMessage() != null ? detail.getMessage() : "");
+            itemHolder.statusTextView.setText(detail.isStatus() ? "Paid" : "Pending");
+            itemHolder.adminEmailTextView.setText(detail.getAdminEmail() != null ? detail.getAdminEmail() : "");
+            itemHolder.snoTextView.setText(detail.getSno() != null ? detail.getSno() : "");
+            itemHolder.openKwhebTextView.setText(detail.getOpenKwheb() != null ? detail.getOpenKwheb() : "");
+            itemHolder.closeKwhebTextView.setText(detail.getCloseKwheb() != null ? detail.getCloseKwheb() : "");
+            itemHolder.conKwhebTextView.setText(detail.getConKwheb() != null ? detail.getConKwheb() : "");
+            itemHolder.dgtTextView.setText(detail.getDgt() != null ? detail.getDgt() : "");
+            itemHolder.mcTextView.setText(detail.getMc() != null ? detail.getMc() : "");
+            itemHolder.actdayTextView.setText(detail.getActday() != null ? detail.getActday() : "");
+            itemHolder.totalAmountTextView.setText(detail.getTotalAmount() != null ? "₹" + detail.getTotalAmount() : "₹0");
+            itemHolder.ebtTextView.setText(detail.getEbt() != null ? detail.getEbt() : "");
+            itemHolder.sitenameTextView.setText(detail.getSitename() != null ? detail.getSitename() : "");
+            itemHolder.startDateTextView.setText(detail.getStartdate() != null ? detail.getStartdate() : "");
+            itemHolder.endDateTextView.setText(detail.getEnddate() != null ? detail.getEnddate() : "");
+
         }
     }
 
